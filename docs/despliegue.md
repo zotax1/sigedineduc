@@ -14,7 +14,9 @@
    npx supabase db push
    ```
 
-   Esto crea el esquema, la RLS, el bucket privado `documentos` con sus políticas, la publicación de Realtime y, si `pg_cron` está disponible, la tarea horaria de alertas. **No haga cambios manuales en producción**: cualquier cambio de esquema debe ser una nueva migración.
+   **Alternativa sin CLI:** abra *SQL Editor → New query*, pegue el contenido completo de `supabase/deploy/esquema-completo.sql` y pulse *Run*. Se ejecuta en una sola transacción y registra las migraciones como aplicadas (regenérelo con `npm run db:bundle` si cambian las migraciones).
+
+   Cualquiera de las dos vías crea el esquema, la RLS, el bucket privado `documentos` con sus políticas, la publicación de Realtime y, si `pg_cron` está disponible, la tarea horaria de alertas. **No haga cambios manuales en producción**: cualquier cambio de esquema debe ser una nueva migración.
 
 4. **pg_cron**: compruebe en *Integrations → Cron* que exista el trabajo `siged-alertas-plazos`. Si la extensión no estaba habilitada, habilítela y ejecute en el *SQL Editor*:
 

@@ -16,7 +16,8 @@
     "db:types": "supabase gen types typescript --local --schema public > src/lib/supabase/database.types.ts",
     "admin:bootstrap": "tsx --env-file=.env.local scripts/bootstrap-admin.ts",
     "seed:demo": "tsx --env-file=.env.local scripts/seed-demo.ts",
-    "seed:demo:purge": "tsx --env-file=.env.local scripts/seed-demo.ts --purge"
+    "seed:demo:purge": "tsx --env-file=.env.local scripts/seed-demo.ts --purge",
+    "db:bundle": "node scripts/generar-esquema-completo.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.2",
