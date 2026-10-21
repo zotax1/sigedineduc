@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+  <body style="margin:0;background:#f6f7f9;font-family:Arial,Helvetica,sans-serif;color:#0f172a">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" style="max-width:560px;background:#ffffff;border:1px solid #e2e6ec;border-radius:12px">
+            <tr><td style="background:#16325c;color:#ffffff;padding:20px 24px;border-radius:12px 12px 0 0">
+              <strong style="font-size:18px">SIGED-INEDUC</strong><br />
+              <span style="font-size:13px;color:#dbe4f3">Sistema de Gestión y Seguimiento Documental</span>
+            </td></tr>
+            <tr><td style="padding:24px">
+              <h1 style="font-size:18px;margin:0 0 12px">Restablecer contraseña</h1>
+              <p style="font-size:14px;line-height:1.6">Recibimos una solicitud para restablecer la contraseña de su cuenta en SIGED-INEDUC.</p>
+              <p style="text-align:center;margin:24px 0">
+                <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/actualizar-contrasena"
+                   style="background:#16325c;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:bold;display:inline-block">Establecer nueva contraseña</a>
+              </p>
+              <p style="font-size:12px;color:#5b6474;line-height:1.6">Si usted no lo solicitó, ignore este mensaje: su contraseña actual seguirá vigente.</p>
+            </td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

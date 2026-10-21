@@ -1,0 +1,2 @@
+-- Sin datos de semilla en SQL. Los catálogos institucionales se crean en las
+-- migraciones. Para datos FICTICIOS de demostración use: npm run seed:demo
