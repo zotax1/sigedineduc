@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import type { Database } from "./database.types";
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "./public-config";
 
 const PUBLIC_PATHS = ["/login", "/recuperar", "/auth/confirm", "/auth/error"];
 
@@ -15,8 +16,8 @@ function isPublic(pathname: string) {
  */
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const url = SUPABASE_URL;
+  const key = SUPABASE_PUBLISHABLE_KEY;
 
   if (!url || !key) {
     // Sin configuración no se expone ninguna página interna.

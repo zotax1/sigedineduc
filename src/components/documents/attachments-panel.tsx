@@ -12,6 +12,7 @@ import { EmptyState, FormField } from "@/components/ui/misc";
 import { EXTENSION_LABELS, MIME_BY_EXTENSION, extensionOf, precheckFile, type SupportedExtension } from "@/lib/files";
 import { formatDateTime, formatFileSize } from "@/lib/format";
 import { finalizeAttachment, prepareAttachmentUpload, removeAttachment } from "@/lib/actions/attachments";
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/supabase/public-config";
 
 export type AttachmentRow = {
   id: string;
@@ -26,8 +27,8 @@ export type AttachmentRow = {
 };
 
 function uploadWithProgress(path: string, token: string, file: File, onProgress: (pct: number) => void) {
-  const base = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+  const base = SUPABASE_URL!;
+  const key = SUPABASE_PUBLISHABLE_KEY!;
   const ext = extensionOf(file.name) as SupportedExtension;
   const url = `${base}/storage/v1/object/upload/sign/documentos/${path.split("/").map(encodeURIComponent).join("/")}?token=${encodeURIComponent(token)}`;
   return new Promise<void>((resolve, reject) => {

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/supabase/public-config";
 
 /**
  * Variables de entorno. Las públicas (NEXT_PUBLIC_*) se incrustan en el
@@ -27,8 +28,8 @@ export function publicEnv(): PublicEnv {
   if (cachedPublic) return cachedPublic;
   // Acceso explícito para que Next.js incruste los valores en el cliente.
   const parsed = publicSchema.safeParse({
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_SUPABASE_URL: SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: SUPABASE_PUBLISHABLE_KEY,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || undefined,
   });
   if (!parsed.success) {
@@ -46,7 +47,8 @@ export function serverEnv(): ServerEnv {
   if (cachedServer) return cachedServer;
   const parsed = serverSchema.safeParse({
     ...publicEnv(),
-    SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY || undefined,
+    // Acepta también SUPABASE_SERVICE_ROLE_KEY (integración de Vercel).
+    SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || undefined,
     CRON_SECRET: process.env.CRON_SECRET || undefined,
   });
   if (!parsed.success) {
