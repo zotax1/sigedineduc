@@ -12,6 +12,15 @@ test.describe("Acceso y permisos", () => {
     expect([302, 307, 401]).toContain(exportRes.status());
   });
 
+  test("el manual de usuario se abre desde el inicio de sesión sin autenticarse", async ({ page }) => {
+    await page.goto("/login");
+    const popupPromise = page.waitForEvent("popup");
+    await page.getByRole("link", { name: "MANUAL DE USUARIO PLATAFORMA" }).click();
+    const manual = await popupPromise;
+    await expect(manual).toHaveURL(/\/manual-usuario\.html$/);
+    await expect(manual.getByRole("heading", { level: 1 })).toContainText("Seguimiento documental");
+  });
+
   test("muestra un error en español con credenciales incorrectas", async ({ page }) => {
     await page.goto("/login");
     await page.getByLabel("Correo electrónico").fill(VIEWER);

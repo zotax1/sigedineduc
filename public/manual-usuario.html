@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Manual de uso y entrenamiento de SIGED-INEDUC.">
+<meta name="robots" content="noindex">
+<title>Manual SIGED-INEDUC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: manual impreso — portada a sangre con degradado crema→ladrillo, índice lateral fijo en escritorio, capítulos numerados con láminas (diagramas) en lugar de muros de texto. Diseño de un solo tema (papel crema) por decisión. */
+:root {
+  color-scheme: light;
+  --cream: #f5ecdf;
+  --paper: #fbf7f1;
+  --card: #fffdf9;
+  --ink: #2a201b;
+  --muted: #6d5c52;
+  --line: #e3d5c3;
+  --brick: #a13d29;
+  --brick-deep: #6f2a1c;
+  --brick-soft: #f1dccf;
+  --sand: #d9bba4;
+  --ok: #3f6f45;
+  --warn: #a06a12;
+  --app-navy: #16325c;
+  --app-green: #15803d;
+  --app-red: #b91c1c;
+  --app-gray: #9aa3b2;
+  --f-display: "Young Serif", "Georgia", "Times New Roman", serif;
+  --f-body: "Public Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.6; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 400; text-wrap: balance; line-height: 1.15; margin: 0; }
+p { margin: 0; }
+a { color: var(--brick); }
+:focus-visible { outline: 2px solid var(--brick); outline-offset: 2px; }
+.mono { font-family: var(--f-mono); }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* ---------- Portada ---------- */
+.cover {
+  background:
+    radial-gradient(120% 90% at 8% 0%, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 55%),
+    linear-gradient(158deg, var(--cream) 0%, #efdcc9 38%, #d79b80 70%, var(--brick) 100%);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.cover::after {
+  content: ""; position: absolute; right: -120px; bottom: -160px; width: 520px; height: 520px; border-radius: 50%;
+  border: 1px solid rgba(255,253,249,.35); box-shadow: 0 0 0 60px rgba(255,253,249,.06), 0 0 0 130px rgba(255,253,249,.05);
+  pointer-events: none;
+}
+.cover-inner { max-width: 1120px; margin: 0 auto; padding-block: 64px 56px; display: grid; gap: 40px; position: relative; z-index: 1; }
+.cover-top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.cover-mark { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 600; letter-spacing: .06em; }
+.cover-mark span.seal { width: 34px; height: 34px; border-radius: 8px; background: var(--brick); color: var(--cream); display: grid; place-items: center; font-family: var(--f-display); font-size: 15px; letter-spacing: 0; }
+.cover h1 { font-size: clamp(44px, 9vw, 104px); letter-spacing: -.01em; color: var(--ink); }
+.cover .eyebrow { font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--brick-deep); font-weight: 600; margin-bottom: 14px; }
+.cover .lede { font-size: clamp(18px, 2.2vw, 22px); max-width: 34ch; color: #3d2f28; margin-top: 18px; }
+.cover-route { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.cover-route .stop { background: rgba(255,253,249,.78); border: 1px solid rgba(111,42,28,.18); border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 600; }
+.cover-route .arrow { color: var(--brick-deep); font-size: 18px; }
+.cover-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; border-top: 1px solid rgba(42,32,27,.18); padding-top: 20px; }
+.cover-meta div { font-size: 14px; color: #3d2f28; }
+.cover-meta b { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 2px; }
+.cover .on-brick { color: var(--cream); }
+
+/* ---------- Estructura ---------- */
+.shell { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 48px; padding-block: 48px 96px; }
+.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; font-size: 14px; }
+.toc h2 { font-family: var(--f-body); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 12px; }
+.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: toc; }
+.toc a { display: grid; grid-template-columns: 26px 1fr; gap: 6px; padding: 6px 8px; border-radius: 6px; color: var(--ink); text-decoration: none; }
+.toc a:hover { background: var(--brick-soft); }
+.toc a span { font-family: var(--f-mono); font-size: 12px; color: var(--brick); padding-top: 2px; }
+main { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 72px; }
+.chapter { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; scroll-margin-top: 24px; }
+.ch-head { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+.ch-num { font-family: var(--f-display); font-size: 44px; color: var(--brick); line-height: 1; grid-row: span 2; }
+.ch-head h2 { font-size: clamp(26px, 3.4vw, 34px); }
+.ch-head p { color: var(--muted); font-size: 15px; }
+.lead { font-size: 18px; max-width: 62ch; }
+.note { display: flex; gap: 12px; align-items: flex-start; background: var(--brick-soft); border-radius: var(--r); padding: 14px 16px; font-size: 15px; max-width: 70ch; }
+.note svg { flex: none; margin-top: 3px; color: var(--brick-deep); }
+.who { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--muted); }
+.tag.admin { border-color: var(--brick); color: var(--brick-deep); }
+.ui { font-family: var(--f-body); font-weight: 600; font-size: .92em; background: var(--card); border: 1px solid var(--sand); border-bottom-width: 2px; border-radius: 6px; padding: 1px 7px; white-space: nowrap; }
+.ui.primary { background: var(--app-navy); color: #fff; border-color: #0e2342; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.panel h3 { font-size: 20px; }
+.panel .ico { width: 38px; height: 38px; border-radius: 9px; display: grid; place-items: center; background: var(--brick-soft); color: var(--brick-deep); }
+.small { font-size: 14px; color: var(--muted); }
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.plate { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; }
+.plate-cap { font-size: 13px; color: var(--muted); margin-top: 10px; }
+.plate-cap b { font-family: var(--f-mono); font-weight: 500; color: var(--brick); margin-right: 6px; }
+
+/* ---------- Capítulo 1: en 60 segundos ---------- */
+.sixty { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); overflow: hidden; }
+.sixty > div { padding: 20px; display: grid; gap: 8px; align-content: start; }
+.sixty > div + div { border-left: 1px solid var(--line); }
+.sixty .k { font-family: var(--f-mono); font-size: 12px; color: var(--brick); }
+.sixty h3 { font-size: 21px; }
+
+/* ---------- Capítulo 2: anatomía ---------- */
+.anatomy { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.doc-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: grid; gap: 14px; font-size: 14px; box-shadow: 0 1px 0 var(--line); }
+.doc-card .row { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
+.pin { width: 24px; height: 24px; border-radius: 50%; background: var(--brick); color: var(--cream); font-family: var(--f-mono); font-size: 12px; display: grid; place-items: center; }
+.fake-label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.fake-val { font-weight: 600; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 2px 10px; font-size: 12.5px; font-weight: 600; }
+.chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.chip.warn { background: #fdf3e2; color: #8a5a0c; }
+.chip.info { background: #e8effd; color: #1d4ed8; }
+.chip.ok { background: #e7f5ec; color: var(--app-green); }
+.chip.navy { background: #e8eef8; color: var(--app-navy); }
+.chip.gray { background: #eef0f3; color: #5b6474; }
+.chip.red { background: #fbeaea; color: var(--app-red); }
+.defs { display: grid; gap: 12px; margin: 0; }
+.defs div { display: grid; grid-template-columns: 28px 1fr; gap: 10px; }
+.defs dt { font-weight: 700; }
+.defs dd { margin: 0; color: #3d2f28; font-size: 15px; }
+
+/* ---------- Capítulo 3: roles ---------- */
+.roles { display: grid; grid-template-columns: minmax(0, 1fr) 120px 120px; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--card); font-size: 15px; min-width: 520px; }
+.roles > div { padding: 11px 16px; border-top: 1px solid var(--line); display: flex; align-items: center; }
+.roles > .h { border-top: 0; background: var(--cream); font-weight: 700; font-size: 13px; letter-spacing: .04em; }
+.roles > .c { justify-content: center; }
+.roles .grp { grid-column: 1 / -1; background: var(--paper); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding-block: 8px; }
+.yes { color: var(--ok); }
+.no { color: var(--sand); }
+.part { font-size: 12.5px; color: var(--warn); font-weight: 600; text-align: center; line-height: 1.3; }
+
+/* ---------- Pasos ---------- */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 0; counter-reset: st; }
+.steps li { position: relative; padding: 0 16px 0 0; display: grid; gap: 8px; align-content: start; counter-increment: st; }
+.steps li::before { content: counter(st); width: 34px; height: 34px; border-radius: 50%; background: var(--brick); color: var(--cream); font-family: var(--f-mono); font-weight: 500; display: grid; place-items: center; position: relative; z-index: 1; }
+.steps li::after { content: ""; position: absolute; top: 17px; left: 34px; right: 0; height: 2px; background: repeating-linear-gradient(90deg, var(--sand) 0 6px, transparent 6px 10px); }
+.steps li:last-child::after { display: none; }
+.steps h3 { font-family: var(--f-body); font-weight: 700; font-size: 15px; }
+.steps p { font-size: 14px; color: #3d2f28; }
+
+/* ---------- Capítulo 5: maqueta ---------- */
+.mock { min-width: 620px; display: grid; grid-template-columns: 180px 1fr; border-radius: 12px; overflow: hidden; border: 1px solid #c9b7a3; font-size: 12px; box-shadow: 0 18px 40px -24px rgba(42,32,27,.45); }
+.mock-side { background: #0f2443; color: #dbe4f3; padding: 14px 10px; display: grid; gap: 4px; align-content: start; position: relative; }
+.mock-brand { display: flex; gap: 8px; align-items: center; padding: 4px 6px 12px; color: #fff; font-weight: 700; position: relative; }
+.mock-brand i { width: 22px; height: 22px; border-radius: 6px; background: rgba(255,255,255,.12); display: grid; place-items: center; font-style: normal; font-size: 9px; }
+.mock-item { padding: 6px 8px; border-radius: 5px; display: flex; justify-content: space-between; }
+.mock-item.on { background: #1d3d6e; color: #fff; box-shadow: inset 3px 0 0 #7fb0e6; }
+.mock-item .badge { background: #d08a18; color: #fff; border-radius: 999px; padding: 0 6px; font-size: 10px; font-weight: 700; }
+.mock-main { background: #f6f7f9; display: grid; grid-template-rows: auto 1fr; }
+.mock-top { background: #fff; border-bottom: 1px solid #e2e6ec; display: flex; align-items: center; gap: 10px; padding: 10px 12px; position: relative; }
+.mock-search { flex: 1; border: 1px solid #d5dae2; border-radius: 6px; padding: 5px 8px; color: #5b6474; background: #f1f3f6; }
+.mock-live { background: #e7f5ec; color: #15803d; border-radius: 999px; padding: 2px 8px; font-weight: 600; }
+.mock-bell { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; color: #0f172a; position: relative; }
+.mock-bell::after { content: "3"; position: absolute; top: -4px; right: -4px; background: #b91c1c; color: #fff; border-radius: 999px; font-size: 9px; padding: 0 4px; }
+.mock-avatar { display: flex; align-items: center; gap: 6px; color: #0f172a; }
+.mock-avatar i { width: 22px; height: 22px; border-radius: 50%; background: #16325c; color: #fff; display: grid; place-items: center; font-style: normal; font-size: 10px; }
+.mock-body { padding: 14px; display: grid; gap: 10px; align-content: start; color: #0f172a; }
+.mock-body h4 { margin: 0; font-size: 15px; }
+.mock-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.mock-kpi { background: #fff; border: 1px solid #e2e6ec; border-radius: 6px; padding: 8px; }
+.mock-kpi b { display: block; font-size: 17px; }
+.mock-lines { background: #fff; border: 1px solid #e2e6ec; border-radius: 6px; height: 70px; background-image: repeating-linear-gradient(180deg, transparent 0 16px, #eef0f3 16px 17px); }
+.callout { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: var(--brick); color: var(--cream); font-family: var(--f-mono); font-size: 11px; display: grid; place-items: center; box-shadow: 0 0 0 3px rgba(251,247,241,.9); z-index: 2; }
+.legend-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; }
+.legend-list li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; font-size: 15px; }
+.legend-list b { display: block; }
+
+/* ---------- Capítulo 6: indicadores ---------- */
+.kpi-key { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: grid; gap: 6px; align-content: start; }
+.kpi .n { font-family: var(--f-display); font-size: 30px; line-height: 1; color: var(--ink); }
+.kpi .t { font-weight: 700; font-size: 14px; }
+.kpi .d { font-size: 13px; color: var(--muted); }
+.kpi.alert .n { color: var(--brick); }
+
+/* ---------- Capítulo 7: ruta ---------- */
+.route svg { width: 100%; height: auto; display: block; min-width: 640px; }
+.indicators { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.ind { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; font-size: 14px; }
+.dot { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; color: #fff; }
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; list-style: none; padding: 0; margin: 0; }
+.rules li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; font-size: 15px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; }
+.rules svg { color: var(--brick); margin-top: 3px; }
+
+/* ---------- Capítulo 8: recetas ---------- */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tab { font-family: var(--f-body); font-size: 14px; font-weight: 600; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--brick); border-color: var(--brick); color: var(--cream); }
+.recipe { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 24px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; min-width: 0; }
+.recipe-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+.recipe h3 { font-size: 24px; }
+.recipe ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; counter-reset: rs; }
+.recipe ol > li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; counter-increment: rs; font-size: 15.5px; }
+.recipe ol > li::before { content: counter(rs); width: 28px; height: 28px; border-radius: 8px; background: var(--brick-soft); color: var(--brick-deep); font-family: var(--f-mono); display: grid; place-items: center; font-size: 13px; }
+.recipe .tip { font-size: 14px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 14px; }
+.fields { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.field { font-size: 12.5px; border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; background: var(--paper); }
+.field.req { border-color: var(--brick); }
+.field.req::after { content: " *"; color: var(--brick); font-weight: 700; }
+
+/* ---------- Capítulo 9: dónde está ---------- */
+.finder { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; align-items: stretch; }
+.finder > div { background: var(--card); border: 1px solid var(--line); padding: 18px; display: grid; gap: 8px; align-content: start; position: relative; }
+.finder > div:first-child { border-radius: var(--r) 0 0 var(--r); }
+.finder > div:last-child { border-radius: 0 var(--r) var(--r) 0; }
+.finder > div + div { border-left: 0; }
+.finder .q { font-family: var(--f-mono); font-size: 12px; color: var(--brick); }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.filter { display: inline-flex; flex-direction: column; border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 6px 10px; font-size: 12px; color: var(--muted); }
+.filter b { color: var(--ink); font-size: 14px; font-weight: 600; }
+
+/* ---------- Capítulo 10: reportes ---------- */
+.reports { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.report { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 6px; align-content: start; }
+.report b { font-size: 15px; }
+.report span { font-size: 13.5px; color: var(--muted); }
+.formats { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.fmt { font-family: var(--f-mono); font-size: 13px; border-radius: 6px; padding: 4px 10px; background: var(--ink); color: var(--cream); }
+
+/* ---------- Capítulo 11: parámetros ---------- */
+table.params { width: 100%; border-collapse: collapse; font-size: 15px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; min-width: 520px; }
+table.params th, table.params td { text-align: left; padding: 10px 14px; border-top: 1px solid var(--line); vertical-align: top; }
+table.params th { background: var(--cream); font-size: 13px; letter-spacing: .04em; border-top: 0; }
+table.params td.v { font-family: var(--f-mono); font-size: 14px; color: var(--brick-deep); white-space: nowrap; }
+
+/* ---------- Capítulo 12: entrenamiento ---------- */
+.sessions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.session { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; display: grid; align-content: start; }
+.session-top { background: linear-gradient(135deg, var(--cream), var(--brick-soft)); padding: 16px 18px; display: grid; gap: 4px; }
+.session-top .num { font-family: var(--f-mono); font-size: 12px; color: var(--brick-deep); }
+.session-top h3 { font-size: 22px; }
+.session-body { padding: 16px 18px; display: grid; gap: 10px; }
+.session-body ol { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; }
+.bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: var(--line); }
+.bar span { background: var(--brick); }
+.checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.checklist label { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; font-size: 15px; cursor: pointer; padding: 6px 8px; border-radius: 6px; }
+.checklist label:hover { background: var(--paper); }
+.checklist input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--brick); }
+.progress { font-family: var(--f-mono); font-size: 13px; color: var(--brick-deep); }
+
+/* ---------- Capítulo 13 ---------- */
+.faq { display: grid; gap: 8px; }
+.faq details { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+.faq summary { cursor: pointer; padding: 14px 18px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font-family: var(--f-mono); color: var(--brick); font-size: 18px; line-height: 1; }
+.faq details[open] summary::after { content: "–"; }
+.faq details p { padding: 0 18px 16px; color: #3d2f28; font-size: 15px; max-width: 70ch; }
+.states { display: grid; gap: 14px; }
+.state-row { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 14px; align-items: start; }
+.state-row .lbl { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding-top: 4px; }
+.state-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.state-chips .sep { color: var(--sand); }
+footer.colophon { border-top: 1px solid var(--line); padding-block: 28px 40px; color: var(--muted); font-size: 13px; }
+footer.colophon .inner { max-width: 1120px; margin: 0 auto; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+/* ---------- Adaptación ---------- */
+@media (max-width: 960px) {
+  .shell { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .toc { position: static; }
+  .toc ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpi-key, .indicators { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .grid-2, .grid-3, .sixty, .anatomy, .rules, .reports, .sessions, .checks, .finder, .legend-list { grid-template-columns: 1fr; }
+  .sixty > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .finder > div, .finder > div:first-child, .finder > div:last-child { border-radius: 0; }
+  .finder > div + div { border-left: 1px solid var(--line); border-top: 0; }
+  .finder > div:first-child { border-radius: var(--r) var(--r) 0 0; }
+  .finder > div:last-child { border-radius: 0 0 var(--r) var(--r); }
+  .steps { grid-template-columns: 1fr; gap: 18px; }
+  .steps li { grid-template-columns: 34px 1fr; padding: 0; }
+  .steps li::before { grid-row: span 2; }
+  .steps li::after { top: 34px; left: 16px; right: auto; width: 2px; height: calc(100% - 16px); background: repeating-linear-gradient(180deg, var(--sand) 0 6px, transparent 6px 10px); }
+  .state-row { grid-template-columns: 1fr; gap: 6px; }
+  .toc ol { grid-template-columns: 1fr; }
+  .ch-num { font-size: 34px; }
+}
+@media (max-width: 460px) { .kpi-key, .indicators { grid-template-columns: 1fr; } .recipe, .panel, .plate { padding: 16px; } .ui { white-space: normal; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } .tab, .toc a { transition: background-color .15s, color .15s; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6M12 7.5v.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="6" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4M12 17v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<header class="cover">
+  <div class="cover-inner gutter">
+    <div class="cover-top">
+      <span class="cover-mark"><span class="seal">SG</span>SIGED-INEDUC</span>
+      <span>Universidad Autónoma de Santo Domingo</span>
+    </div>
+    <div>
+      <p class="eyebrow">Manual de uso y entrenamiento</p>
+      <h1>Seguimiento documental, paso a paso</h1>
+      <p class="lede">Todo lo que el personal de INEDUC necesita para consultar, registrar y dar seguimiento a sus documentos en SIGED-INEDUC.</p>
+    </div>
+    <div class="cover-route" aria-label="Ruta obligatoria de los documentos salientes">
+      <span class="stop">INEDUC</span><span class="arrow" aria-hidden="true">→</span>
+      <span class="stop">Dirección de Investigación</span><span class="arrow" aria-hidden="true">→</span>
+      <span class="stop">Decanato</span>
+    </div>
+    <div class="cover-meta">
+      <div><b>Institución</b>Instituto de Investigación e Innovación Educativa (INEDUC)</div>
+      <div><b>Facultad</b>Ciencias de la Educación</div>
+      <div><b>Dirigido a</b>Personal de consulta y administradores</div>
+      <div><b>Edición</b>Versión 1.0 · octubre de 2026</div>
+    </div>
+  </div>
+</header>
+
+<div class="shell gutter">
+  <nav class="toc" aria-label="Contenido del manual">
+    <h2>Contenido</h2>
+    <ol>
+      <li><a href="#que-es"><span>01</span>Qué es SIGED-INEDUC</a></li>
+      <li><a href="#conceptos"><span>02</span>Conceptos clave</a></li>
+      <li><a href="#roles"><span>03</span>Roles y permisos</a></li>
+      <li><a href="#acceso"><span>04</span>Acceso</a></li>
+      <li><a href="#pantalla"><span>05</span>La pantalla</a></li>
+      <li><a href="#panel"><span>06</span>Panel principal</a></li>
+      <li><a href="#ruta"><span>07</span>Ruta obligatoria</a></li>
+      <li><a href="#procedimientos"><span>08</span>Procedimientos</a></li>
+      <li><a href="#consultar"><span>09</span>Consultar información</a></li>
+      <li><a href="#reportes"><span>10</span>Reportes</a></li>
+      <li><a href="#administracion"><span>11</span>Administración</a></li>
+      <li><a href="#entrenamiento"><span>12</span>Plan de entrenamiento</a></li>
+      <li><a href="#ayuda"><span>13</span>Ayuda y glosario</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <!-- 01 -->
+    <section class="chapter" id="que-es" aria-labelledby="h-que-es">
+      <div class="ch-head"><span class="ch-num">01</span><h2 id="h-que-es">Qué es SIGED-INEDUC</h2><p>Lo esencial en un minuto · todo el personal</p></div>
+      <p class="lead">Es la plataforma donde INEDUC registra cada documento que entra y sale, para que cualquier persona autorizada sepa en segundos <b>dónde está, quién lo tiene y qué falta</b>, sin llamar ni preguntar.</p>
+      <div class="sixty">
+        <div><span class="k">Qué guarda</span><h3>Cada movimiento</h3><p class="small">Fecha, hora, dependencia y la persona que lo registró. El historial nunca se borra.</p></div>
+        <div><span class="k">Quién lo usa</span><h3>Dos roles</h3><p class="small">El administrador registra; el personal de consulta solo visualiza.</p></div>
+        <div><span class="k">Regla de oro</span><h3>La ruta no se salta</h3><p class="small">Todo saliente pasa por la Dirección de Investigación antes del Decanato.</p></div>
+      </div>
+      <div class="note"><svg width="18" height="18"><use href="#i-info"/></svg><p>Se abre desde el navegador (Chrome, Edge o Firefox), en computadora, tableta o celular, con la dirección que le entregue la administración. No requiere instalar nada.</p></div>
+    </section>
+
+    <!-- 02 -->
+    <section class="chapter" id="conceptos" aria-labelledby="h-conceptos">
+      <div class="ch-head"><span class="ch-num">02</span><h2 id="h-conceptos">Conceptos clave</h2><p>Cómo leer la ficha de un documento</p></div>
+      <div class="anatomy">
+        <figure class="plate" style="margin:0">
+          <div class="doc-card" aria-label="Ejemplo de ficha de documento con sus partes numeradas">
+            <div class="row"><span class="pin">1</span><div><div class="fake-label">Número de oficio</div><div class="fake-val">INEDUC-014-2026</div></div></div>
+            <div class="row"><span class="pin">2</span><div><div class="fake-label">Referencia interna</div><div class="fake-val mono" style="font-weight:500">SIGED-S-2026-00014</div></div></div>
+            <div class="row"><span class="pin">3</span><div><div class="fake-label">Etapa</div><span class="chip warn">Remitido a la Dirección de Investigación</span></div></div>
+            <div class="row"><span class="pin">4</span><div><div class="fake-label">Dependencia actual</div><div class="fake-val">Dirección de Investigación</div></div></div>
+            <div class="row"><span class="pin">5</span><div><div class="fake-label">Responsable · Fecha límite</div><div class="fake-val">Ana Pérez · 30/10/2026 <span class="small" style="color:var(--warn)">· vence en 8 días</span></div></div></div>
+            <div class="row"><span class="pin">6</span><div><div class="fake-label">Visibilidad</div><div class="fake-val" style="display:flex;gap:6px;align-items:center"><svg width="14" height="14"><use href="#i-lock"/></svg> Restringido</div></div></div>
+          </div>
+          <figcaption class="plate-cap"><b>Lámina 1</b>Ficha de ejemplo (datos ficticios).</figcaption>
+        </figure>
+        <dl class="defs">
+          <div><span class="pin">1</span><div><dt>Número oficial u oficio</dt><dd>El que trae el documento. Lo escribe el administrador y nunca se genera solo. Puede quedar vacío.</dd></div></div>
+          <div><span class="pin">2</span><div><dt>Referencia interna</dt><dd>Código automático del sistema: <span class="mono">S</span> para salientes, <span class="mono">E</span> para entrantes.</dd></div></div>
+          <div><span class="pin">3</span><div><dt>Etapa o estado</dt><dd>En qué punto del proceso está. Cambia solo cuando se registra un movimiento.</dd></div></div>
+          <div><span class="pin">4</span><div><dt>Dependencia actual</dt><dd>La oficina donde está ahora mismo, según el último movimiento.</dd></div></div>
+          <div><span class="pin">5</span><div><dt>Responsable y fecha límite</dt><dd>Quién le da seguimiento y para cuándo. Generan avisos de «próximo a vencer» y «vencido».</dd></div></div>
+          <div><span class="pin">6</span><div><dt>Visibilidad</dt><dd><b>General</b> para todo el personal; <b>Restringido</b> solo para administradores, el responsable y quien se autorice.</dd></div></div>
+        </dl>
+      </div>
+      <div class="grid-3">
+        <div class="panel"><h3>Movimiento</h3><p class="small">Cada cambio de etapa o de dependencia. Queda en el historial con fecha, hora y usuario.</p></div>
+        <div class="panel"><h3>Trámite</h3><p class="small">Tarea con responsable y plazo, como «Preparar respuesta». Puede ligarse a un documento o no.</p></div>
+        <div class="panel"><h3>Archivado</h3><p class="small">Estado final de un documento completado. Ya no admite cambios.</p></div>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section class="chapter" id="roles" aria-labelledby="h-roles">
+      <div class="ch-head"><span class="ch-num">03</span><h2 id="h-roles">Roles y permisos</h2><p>Su rol aparece bajo su nombre, arriba a la derecha</p></div>
+      <div class="scroll">
+        <div class="roles" role="table" aria-label="Permisos por rol">
+          <div class="h" role="columnheader">Acción</div><div class="h c" role="columnheader">Administrador</div><div class="h c" role="columnheader">Consulta</div>
+          <div class="grp">Consultar</div>
+          <div>Ver panel, listados, detalles e historial</div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div>
+          <div>Buscar, filtrar y descargar adjuntos</div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div>
+          <div>Generar y exportar reportes</div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div>
+          <div>Ver documentos restringidos</div><div class="c yes" aria-label="Todos"><svg width="20" height="20"><use href="#i-check"/></svg></div><div class="c part">Si es responsable o fue autorizado</div>
+          <div class="grp">Registrar</div>
+          <div>Registrar y editar documentos</div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div><div class="c no" aria-label="No"><svg width="18" height="18"><use href="#i-x"/></svg></div>
+          <div>Registrar movimientos y correcciones</div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div><div class="c no" aria-label="No"><svg width="18" height="18"><use href="#i-x"/></svg></div>
+          <div>Adjuntar, reemplazar o retirar archivos</div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div><div class="c no" aria-label="No"><svg width="18" height="18"><use href="#i-x"/></svg></div>
+          <div>Crear y actualizar trámites</div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div><div class="c no" aria-label="No"><svg width="18" height="18"><use href="#i-x"/></svg></div>
+          <div class="grp">Administrar</div>
+          <div>Usuarios, dependencias, catálogos y parámetros</div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div><div class="c no" aria-label="No"><svg width="18" height="18"><use href="#i-x"/></svg></div>
+          <div>Bitácora de auditoría</div><div class="c yes" aria-label="Sí"><svg width="20" height="20"><use href="#i-check"/></svg></div><div class="c no" aria-label="No"><svg width="18" height="18"><use href="#i-x"/></svg></div>
+        </div>
+      </div>
+      <div class="note"><svg width="18" height="18"><use href="#i-lock"/></svg><p><b>Nadie, ni un administrador,</b> puede saltarse la ruta obligatoria, borrar el historial o cambiar su propio rol. Las cuentas nuevas siempre empiezan como Personal de consulta.</p></div>
+    </section>
+
+    <!-- 04 -->
+    <section class="chapter" id="acceso" aria-labelledby="h-acceso">
+      <div class="ch-head"><span class="ch-num">04</span><h2 id="h-acceso">Acceso a la plataforma</h2><p>Solo con cuenta creada por la administración: no hay registro público</p></div>
+      <div class="plate">
+        <ol class="steps" style="--n:4">
+          <li><h3>Abra la dirección</h3><p>Verá <b>Iniciar sesión</b>.</p></li>
+          <li><h3>Correo y contraseña temporal</h3><p>La que le entregó el administrador. Pulse <span class="ui primary">Entrar</span>.</p></li>
+          <li><h3>Cree su contraseña</h3><p>10 caracteres o más, con mayúsculas, minúsculas y números.</p></li>
+          <li><h3>Listo</h3><p>Entra al <b>Panel principal</b>. La temporal ya no sirve.</p></li>
+        </ol>
+        <p class="plate-cap"><b>Lámina 2</b>Primer ingreso. Mientras no cambie la contraseña temporal, el sistema no le deja usar otras pantallas.</p>
+      </div>
+      <div class="grid-3">
+        <div class="panel"><h3>Cambiar contraseña</h3><p class="small">Su nombre (arriba a la derecha) → <span class="ui">Mi perfil</span> → <span class="ui">Cambiar contraseña</span>.</p></div>
+        <div class="panel"><h3>Cerrar sesión</h3><p class="small">Su nombre → <span class="ui">Cerrar sesión</span>. Siempre en computadoras compartidas.</p></div>
+        <div class="panel"><h3>¿Olvidó la contraseña?</h3><p class="small">Pida al administrador una contraseña temporal nueva.</p></div>
+      </div>
+      <div class="note"><svg width="18" height="18"><use href="#i-alert"/></svg><p>No comparta su contraseña: cada movimiento queda firmado con el nombre de quien inició sesión.</p></div>
+    </section>
+
+    <!-- 05 -->
+    <section class="chapter" id="pantalla" aria-labelledby="h-pantalla">
+      <div class="ch-head"><span class="ch-num">05</span><h2 id="h-pantalla">La pantalla</h2><p>Dos zonas fijas en todas las páginas</p></div>
+      <figure class="plate" style="margin:0">
+        <div class="scroll">
+          <div class="mock" aria-label="Maqueta de la pantalla principal con partes numeradas">
+            <div class="mock-side">
+              <span class="callout" style="top:10px;right:-11px">1</span>
+              <div class="mock-brand"><i>SG</i>SIGED-INEDUC</div>
+              <div class="mock-item on">Panel principal</div>
+              <div class="mock-item">Documentos entrantes</div>
+              <div class="mock-item">Documentos salientes</div>
+              <div class="mock-item">Trámites y procedimientos</div>
+              <div class="mock-item">Seguimiento por dependencia</div>
+              <div class="mock-item">Notificaciones <span class="badge">3</span></div>
+              <div class="mock-item">Reportes</div>
+              <div class="mock-item">Administración</div>
+              <span class="callout" style="top:72px;right:-11px">2</span>
+            </div>
+            <div class="mock-main">
+              <div class="mock-top">
+                <div class="mock-search">Buscar por número, asunto, remitente…</div>
+                <span class="callout" style="top:-8px;left:18px">3</span>
+                <span class="mock-live">● En vivo</span>
+                <span class="callout" style="top:-8px;right:150px">4</span>
+                <span class="mock-bell"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 21h4" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>
+                <span class="callout" style="top:-8px;right:108px">5</span>
+                <span class="mock-avatar"><i>AP</i>Ana Pérez</span>
+                <span class="callout" style="top:-8px;right:10px">6</span>
+              </div>
+              <div class="mock-body">
+                <h4>Panel principal</h4>
+                <div class="mock-kpis"><div class="mock-kpi">Entrantes<b>42</b></div><div class="mock-kpi">Salientes<b>27</b></div><div class="mock-kpi">Trámites pendientes<b>9</b></div><div class="mock-kpi">Vencidos<b style="color:#b91c1c">2</b></div></div>
+                <div class="mock-lines"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption class="plate-cap"><b>Lámina 3</b>Maqueta con cifras de ejemplo.</figcaption>
+      </figure>
+      <ul class="legend-list">
+        <li><span class="pin">1</span><div><b>Inicio</b>El bloque SIGED-INEDUC lleva siempre al Panel principal.</div></li>
+        <li><span class="pin">2</span><div><b>Menú</b>Los ocho módulos. «Administración» solo aparece a administradores. El número naranja son avisos sin leer.</div></li>
+        <li><span class="pin">3</span><div><b>Buscador</b>Número, asunto, remitente o responsable, sin importar tildes. Pulse Enter.</div></li>
+        <li><span class="pin">4</span><div><b>En vivo</b>Verde: la página se actualiza sola. Ámbar «Reconectando…»: pulse <span class="ui">Actualizar ahora</span>.</div></li>
+        <li><span class="pin">5</span><div><b>Campana</b>Sus notificaciones; el punto rojo indica las no leídas.</div></li>
+        <li><span class="pin">6</span><div><b>Perfil</b>Nombre, rol, <span class="ui">Mi perfil</span> y <span class="ui">Cerrar sesión</span>.</div></li>
+      </ul>
+      <p class="small">En el celular, el menú se abre con el botón ☰ y las tablas se muestran como tarjetas.</p>
+    </section>
+
+    <!-- 06 -->
+    <section class="chapter" id="panel" aria-labelledby="h-panel">
+      <div class="ch-head"><span class="ch-num">06</span><h2 id="h-panel">Panel principal</h2><p>Cuánto hay, dónde está y qué requiere atención</p></div>
+      <p class="lead">Las cifras se calculan en el momento con los registros reales y solo incluyen lo que su cuenta puede ver. Cambie el <b>Período de registro</b> (arriba a la derecha) y todo se recalcula.</p>
+      <div class="kpi-key">
+        <div class="kpi"><span class="t">Entrantes · Salientes</span><span class="d">Registrados en el período elegido.</span></div>
+        <div class="kpi"><span class="t">Trámites pendientes</span><span class="d">Ni completados ni cancelados.</span></div>
+        <div class="kpi alert"><span class="t">Trámites vencidos</span><span class="d">Abiertos con la fecha límite ya pasada.</span></div>
+        <div class="kpi"><span class="t">En seguimiento</span><span class="d">Documentos abiertos.</span></div>
+        <div class="kpi"><span class="t">Completados</span><span class="d">Completados o archivados.</span></div>
+        <div class="kpi alert"><span class="t">Pendientes de atención</span><span class="d">Vencidos, detenidos o sin responsable.</span></div>
+        <div class="kpi"><span class="t">Actualizados</span><span class="d">Con cambios en los últimos 7 días.</span></div>
+        <div class="kpi"><span class="t">Pulse una tarjeta</span><span class="d">Abre la lista que cuenta.</span></div>
+      </div>
+      <div class="grid-3">
+        <div class="panel"><div class="ico"><svg width="20" height="20"><use href="#i-route"/></svg></div><h3>Por dependencia</h3><p class="small">Tres tarjetas: lo que está en INEDUC, la Dirección de Investigación y el Decanato, con cuántos esperan recepción.</p></div>
+        <div class="panel"><div class="ico"><svg width="20" height="20"><use href="#i-alert"/></svg></div><h3>Alertas</h3><p class="small">Vencidos, próximos a vencer, remitidos sin recepción y documentos sin movimiento.</p></div>
+        <div class="panel"><div class="ico"><svg width="20" height="20"><use href="#i-clock"/></svg></div><h3>Actividad reciente</h3><p class="small">Los últimos 10 movimientos, con quién los registró y cuándo.</p></div>
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section class="chapter" id="ruta" aria-labelledby="h-ruta">
+      <div class="ch-head"><span class="ch-num">07</span><h2 id="h-ruta">La ruta obligatoria</h2><p>Solo para documentos salientes</p></div>
+      <p class="lead">Todo documento saliente pasa primero por la <b>Dirección de Investigación de la Facultad de Ciencias de la Educación</b> y solo después llega al <b>Decanato</b>. El sistema no permite otro orden.</p>
+      <figure class="plate route" style="margin:0">
+        <div class="scroll">
+          <svg viewBox="0 0 760 400" role="img" aria-label="Ruta: INEDUC, Dirección de Investigación, Decanato, Seguimiento y cierre. El envío directo de INEDUC al Decanato está bloqueado.">
+            <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8a7464"/></marker></defs>
+            <g font-family="Public Sans, Segoe UI, sans-serif" font-size="13">
+              <path d="M107 84V62H471V84" fill="none" stroke="#a13d29" stroke-width="1.6" stroke-dasharray="5 4"/>
+              <circle cx="289" cy="62" r="9" fill="#fbf7f1" stroke="#a13d29" stroke-width="1.6"/>
+              <path d="M285 58l8 8M293 58l-8 8" stroke="#a13d29" stroke-width="1.6"/>
+              <text x="289" y="42" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2a201b">Envío directo de INEDUC al Decanato: bloqueado</text>
+              <g fill="none" stroke="#c9b7a3" stroke-width="1.25">
+                <rect x="24" y="84" width="166" height="260" rx="10"/><rect x="206" y="84" width="166" height="260" rx="10"/><rect x="388" y="84" width="166" height="260" rx="10"/><rect x="570" y="84" width="166" height="260" rx="10"/>
+              </g>
+              <g fill="#2a201b" font-weight="700"><text x="38" y="108">INEDUC</text><text x="220" y="108">Dirección de</text><text x="220" y="124">Investigación</text><text x="402" y="108">Decanato</text><text x="584" y="108">Seguimiento</text><text x="584" y="124">y cierre</text></g>
+              <g fill="#6d5c52" font-size="11.5"><text x="38" y="124">Origen del saliente</text><text x="220" y="140">Director:</text><text x="220" y="155">Dr. Máximo Díaz</text><text x="402" y="124">Facultad de Ciencias</text><text x="402" y="139">de la Educación</text></g>
+              <g fill="none" stroke="#8a7464" stroke-width="1.25">
+                <path d="M178 190H218" marker-end="url(#arr)"/><path d="M289 212V228" marker-end="url(#arr)"/><path d="M289 272V288" marker-end="url(#arr)"/>
+                <path d="M360 310H380V250"/><path d="M360 250H380V190H400" marker-end="url(#arr)"/>
+                <path d="M471 212V228" marker-end="url(#arr)"/><path d="M542 250H582" marker-end="url(#arr)"/><path d="M542 250H562V190H582" marker-end="url(#arr)"/>
+                <path d="M653 212V228" marker-end="url(#arr)"/><path d="M653 272V288" marker-end="url(#arr)"/>
+              </g>
+              <g stroke-width="1.25">
+                <rect x="36" y="168" width="142" height="44" rx="8" fill="#fffdf9" stroke="#8a7464"/>
+                <rect x="218" y="168" width="142" height="44" rx="8" fill="#fffdf9" stroke="#8a7464"/>
+                <rect x="218" y="228" width="142" height="44" rx="8" fill="#f1dccf" stroke="#a13d29" stroke-width="2"/>
+                <rect x="218" y="288" width="142" height="44" rx="8" fill="#fffdf9" stroke="#8a7464" stroke-dasharray="4 3"/>
+                <rect x="400" y="168" width="142" height="44" rx="8" fill="#fffdf9" stroke="#8a7464"/>
+                <rect x="400" y="228" width="142" height="44" rx="8" fill="#f1dccf" stroke="#a13d29" stroke-width="2"/>
+                <rect x="582" y="168" width="142" height="44" rx="8" fill="#fffdf9" stroke="#8a7464" stroke-dasharray="4 3"/>
+                <rect x="582" y="228" width="142" height="44" rx="8" fill="#fffdf9" stroke="#8a7464"/>
+                <rect x="582" y="288" width="142" height="44" rx="8" fill="#fffdf9" stroke="#8a7464"/>
+              </g>
+              <g fill="#2a201b" text-anchor="middle">
+                <text x="107" y="194">Registrado</text><text x="289" y="194">Remitido</text><text x="289" y="254" font-weight="700">Recibido</text><text x="289" y="314">En gestión</text>
+                <text x="471" y="194">Remitido</text><text x="471" y="254" font-weight="700">Recibido</text>
+                <text x="653" y="194">En seguimiento</text><text x="653" y="254">Completado</text><text x="653" y="314">Archivado</text>
+              </g>
+              <g font-size="11.5" fill="#6d5c52">
+                <rect x="24" y="364" width="28" height="16" rx="4" fill="#f1dccf" stroke="#a13d29" stroke-width="2"/><text x="60" y="376">Recepción: se registra aparte del envío</text>
+                <rect x="300" y="364" width="28" height="16" rx="4" fill="none" stroke="#8a7464" stroke-dasharray="4 3"/><text x="336" y="376">Etapa opcional</text>
+                <path d="M466 372H494" stroke="#a13d29" stroke-width="1.6" stroke-dasharray="5 4"/><text x="502" y="376">Paso no permitido</text>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <figcaption class="plate-cap"><b>Lámina 4</b>El documento avanza de izquierda a derecha. Las dos recepciones son pasos propios.</figcaption>
+      </figure>
+      <ul class="rules">
+        <li><svg width="16" height="16"><use href="#i-route"/></svg><span>En el detalle solo aparecen como botones los pasos permitidos desde la etapa actual.</span></li>
+        <li><svg width="16" height="16"><use href="#i-clock"/></svg><span><b>Remitir no es recibir.</b> Mientras falte la recepción, el documento avisa «Esperando registro de recepción».</span></li>
+        <li><svg width="16" height="16"><use href="#i-pen"/></svg><span>Cada paso guarda la hora del sistema y quién lo registró. El Dr. Máximo Díaz solo figura como autor si registra con su propia cuenta.</span></li>
+        <li><svg width="16" height="16"><use href="#i-alert"/></svg><span>¿Un paso por error? <span class="ui">Corregir último</span>, con motivo. El original queda marcado «Revertido».</span></li>
+      </ul>
+      <div class="indicators" aria-label="Indicadores de la línea de ruta en el detalle">
+        <div class="ind"><span class="dot" style="background:var(--app-green)"><svg width="12" height="12"><use href="#i-check"/></svg></span><span><b>Completada</b><br><span class="small">consta su registro</span></span></div>
+        <div class="ind"><span class="dot" style="background:var(--app-navy)"><svg width="10" height="10"><use href="#i-dot"/></svg></span><span><b>Etapa actual</b><br><span class="small">donde está hoy</span></span></div>
+        <div class="ind"><span class="dot" style="background:var(--app-red)"><svg width="12" height="12"><use href="#i-alert"/></svg></span><span><b>Demorada</b><br><span class="small">vencida o detenida</span></span></div>
+        <div class="ind"><span class="dot" style="background:var(--app-gray)"><svg width="12" height="12"><use href="#i-clock"/></svg></span><span><b>Pendiente</b><br><span class="small">aún no ocurre</span></span></div>
+      </div>
+    </section>
+
+    <!-- 08 -->
+    <section class="chapter" id="procedimientos" aria-labelledby="h-proc">
+      <div class="ch-head"><span class="ch-num">08</span><h2 id="h-proc">Procedimientos del administrador</h2><p class="who"><span class="tag admin">Solo administradores</span></p></div>
+      <p class="lead">Elija una tarea para ver sus pasos. Los campos con borde rojo y asterisco son obligatorios; si falta alguno, el formulario lo marca y conserva lo que ya escribió.</p>
+      <div class="tabs" role="tablist" aria-label="Tareas del administrador">
+        <button class="tab" role="tab" id="t-sal" aria-controls="p-sal" aria-selected="true">Registrar saliente</button>
+        <button class="tab" role="tab" id="t-mov" aria-controls="p-mov" aria-selected="false">Mover un saliente</button>
+        <button class="tab" role="tab" id="t-ent" aria-controls="p-ent" aria-selected="false">Registrar entrante</button>
+        <button class="tab" role="tab" id="t-adj" aria-controls="p-adj" aria-selected="false">Adjuntos</button>
+        <button class="tab" role="tab" id="t-res" aria-controls="p-res" aria-selected="false">Restringir</button>
+        <button class="tab" role="tab" id="t-cor" aria-controls="p-cor" aria-selected="false">Corregir</button>
+        <button class="tab" role="tab" id="t-tra" aria-controls="p-tra" aria-selected="false">Trámites</button>
+      </div>
+
+      <article class="recipe" role="tabpanel" id="p-sal" aria-labelledby="t-sal">
+        <div class="recipe-head"><h3>Registrar un documento saliente</h3><span class="small">Menú → Documentos salientes</span></div>
+        <ol>
+          <li><div>Pulse <span class="ui primary">Registrar saliente</span>.</div></li>
+          <li><div><b>Identificación</b><div class="fields"><span class="field">Número de oficio</span><span class="field">Tipo de documento</span><span class="field req">Asunto</span><span class="field">Descripción</span></div></div></li>
+          <li><div><b>Destino</b><div class="fields"><span class="field">Destinatario</span><span class="field">Institución o dependencia de destino</span><span class="field">Fecha de emisión</span></div></div></li>
+          <li><div><b>Seguimiento</b><div class="fields"><span class="field">Responsable asignado</span><span class="field req">Prioridad</span><span class="field">Fecha límite</span><span class="field">Próxima acción requerida</span></div></div></li>
+          <li><div><b>Confidencialidad</b><div class="fields"><span class="field req">Nivel de visibilidad</span></div></div></li>
+          <li><div>Pulse <span class="ui primary">Registrar documento</span>. Queda en <span class="chip navy">Registrado en INEDUC</span>.</div></li>
+        </ol>
+        <p class="tip">El número de oficio se escribe tal como fue asignado (ej.: INEDUC-001-2026) y no se puede repetir entre salientes.</p>
+      </article>
+
+      <article class="recipe" role="tabpanel" id="p-mov" aria-labelledby="t-mov" hidden>
+        <div class="recipe-head"><h3>Registrar un paso de la ruta</h3><span class="small">Detalle del documento → Situación actual</span></div>
+        <ol>
+          <li><div>Abra el documento. En <b>Próximo paso de la ruta</b> solo verá los pasos permitidos.</div></li>
+          <li><div>Pulse el que corresponda, por ejemplo <span class="ui primary">Remitido a la Dirección de Investigación</span>.</div></li>
+          <li><div>Revise la <b>Vista previa</b>: origen → destino y nueva etapa.</div></li>
+          <li><div>Opcional: <span class="field">Observaciones del movimiento</span> (ej.: «acuse firmado») y <span class="field">Adjunto de soporte</span>.</div></li>
+          <li><div>Pulse <span class="ui primary">Confirmar movimiento</span>. Todos lo ven al instante.</div></li>
+        </ol>
+        <p class="tip">Cuando la dependencia acuse recibo, registre el paso <b>Recepción registrada en…</b>. Sin él, no se habilita la remisión al Decanato.</p>
+      </article>
+
+      <article class="recipe" role="tabpanel" id="p-ent" aria-labelledby="t-ent" hidden>
+        <div class="recipe-head"><h3>Registrar y mover un documento entrante</h3><span class="small">Menú → Documentos entrantes</span></div>
+        <ol>
+          <li><div>Pulse <span class="ui primary">Registrar entrante</span>.</div></li>
+          <li><div><b>Identificación</b><div class="fields"><span class="field">Número oficial del documento</span><span class="field">Tipo</span><span class="field req">Asunto</span></div></div></li>
+          <li><div><b>Remitente y recepción</b> (remitente o institución: al menos uno)<div class="fields"><span class="field">Remitente</span><span class="field">Institución remitente</span><span class="field req">Dependencia destinataria</span><span class="field req">Fecha de recepción</span><span class="field">Recibido por</span></div></div></li>
+          <li><div>Pulse <span class="ui primary">Registrar documento</span>: queda <span class="chip navy">Recibido</span>.</div></li>
+          <li><div>Para moverlo: <span class="ui primary">Registrar movimiento</span> → nuevo estado y dependencia → <span class="ui primary">Confirmar movimiento</span>.</div></li>
+        </ol>
+        <p class="tip">Los entrantes se mueven con libertad entre estados y dependencias. Para archivar, primero páselo a Completado.</p>
+      </article>
+
+      <article class="recipe" role="tabpanel" id="p-adj" aria-labelledby="t-adj" hidden>
+        <div class="recipe-head"><h3>Adjuntar archivos</h3><span class="small">Detalle del documento → Adjuntos</span></div>
+        <ol>
+          <li><div>Pulse <span class="ui">Adjuntar archivo</span>.</div></li>
+          <li><div>Elija el archivo: <span class="mono">PDF · DOC · DOCX · XLS · XLSX · PNG · JPG</span>, hasta 20 MB (configurable).</div></li>
+          <li><div>Pulse <span class="ui primary">Cargar archivo</span> y espere la barra de progreso.</div></li>
+          <li><div>Cada adjunto ofrece <span class="ui">Ver</span> <span class="ui">Descargar</span> <span class="ui">Reemplazar</span> <span class="ui">Retirar</span>.</div></li>
+        </ol>
+        <p class="tip">El sistema revisa el contenido real: un archivo renombrado o dañado se rechaza. Retirar pide un motivo y conserva el archivo para la auditoría.</p>
+      </article>
+
+      <article class="recipe" role="tabpanel" id="p-res" aria-labelledby="t-res" hidden>
+        <div class="recipe-head"><h3>Restringir un documento</h3><span class="small">Formulario → Confidencialidad</span></div>
+        <ol>
+          <li><div>En <span class="field">Nivel de visibilidad</span> elija <b>Restringido</b> y guarde.</div></li>
+          <li><div>En el detalle aparece el recuadro <b>Acceso restringido</b>.</div></li>
+          <li><div>Elija a la persona y pulse <span class="ui">Autorizar</span>; <span class="ui">Retirar</span> le quita el acceso.</div></li>
+        </ol>
+        <p class="tip">Siempre lo ven los administradores y el responsable asignado. Para el resto, el documento no existe: no sale en búsquedas, reportes ni indicadores.</p>
+      </article>
+
+      <article class="recipe" role="tabpanel" id="p-cor" aria-labelledby="t-cor" hidden>
+        <div class="recipe-head"><h3>Corregir un movimiento equivocado</h3><span class="small">Detalle del documento → Situación actual</span></div>
+        <ol>
+          <li><div>Pulse <span class="ui">Corregir último</span>. Verá el movimiento que se va a revertir.</div></li>
+          <li><div>Escriba el <span class="field req">Motivo de la corrección</span> (10 caracteres o más).</div></li>
+          <li><div>Pulse <span class="ui primary">Registrar corrección</span>. El documento vuelve a la etapa anterior.</div></li>
+        </ol>
+        <p class="tip">El original no se borra: queda marcado «Revertido» junto a la corrección. Solo se corrige el último; para varios, repita uno por uno.</p>
+      </article>
+
+      <article class="recipe" role="tabpanel" id="p-tra" aria-labelledby="t-tra" hidden>
+        <div class="recipe-head"><h3>Crear y cerrar un trámite</h3><span class="small">Menú → Trámites, o desde un documento</span></div>
+        <ol>
+          <li><div>Pulse <span class="ui primary">Nuevo trámite</span>.</div></li>
+          <li><div><div class="fields"><span class="field req">Título</span><span class="field">Documento relacionado</span><span class="field">Persona responsable</span><span class="field req">Dependencia responsable</span><span class="field req">Prioridad</span><span class="field req">Fecha de inicio</span><span class="field">Fecha límite</span></div></div></li>
+          <li><div>Pulse <span class="ui primary">Crear trámite</span>: el responsable recibe un aviso.</div></li>
+          <li><div>Avance con <span class="ui">Cambiar estado</span>: Pendiente → En proceso → Completado. Cancelar pide motivo.</div></li>
+        </ol>
+        <p class="tip">«Vencido» y «Próximo a vencer» no son estados: se calculan con la fecha límite y desaparecen al completar.</p>
+      </article>
+    </section>
+
+    <!-- 09 -->
+    <section class="chapter" id="consultar" aria-labelledby="h-consultar">
+      <div class="ch-head"><span class="ch-num">09</span><h2 id="h-consultar">Consultar información</h2><p class="who"><span class="tag">Todo el personal</span></p></div>
+      <div class="finder">
+        <div><span class="q">¿Cuál?</span><h3 style="font-size:20px">Búsquelo</h3><p class="small">Buscador superior: número de oficio, asunto, remitente o responsable.</p></div>
+        <div><span class="q">¿Dónde está?</span><h3 style="font-size:20px">Mire la etapa</h3><p class="small">En el detalle: <b>Dependencia actual</b> y la línea de ruta.</p></div>
+        <div><span class="q">¿Qué falta?</span><h3 style="font-size:20px">Lea el paso pendiente</h3><p class="small">Y el historial: quién registró qué y cuándo.</p></div>
+      </div>
+      <div class="plate" style="display:grid;gap:14px">
+        <b>Filtros de los listados</b>
+        <div class="filters">
+          <span class="filter">Etapa / estado<b>Todos</b></span>
+          <span class="filter">Dependencia actual<b>Todas</b></span>
+          <span class="filter">Prioridad<b>Todas</b></span>
+          <span class="filter">Responsable<b>Todos</b></span>
+          <span class="filter">Situación<b>Activos</b></span>
+          <span class="filter">Registrado desde / hasta<b>dd/mm/aaaa</b></span>
+          <span class="filter">Casillas<b>Solo vencidos · Esperando recepción</b></span>
+        </div>
+        <p class="small">Combine los que necesite y pulse <span class="ui primary">Aplicar filtros</span>; <span class="ui">Restablecer</span> los borra. Los archivados se ven con <b>Situación → Todos</b>. Copie la dirección de una lista filtrada para compartirla tal cual.</p>
+      </div>
+      <div class="grid-3">
+        <div class="panel"><h3>Seguimiento por dependencia</h3><p class="small">Elija una oficina: «Remitidos, esperando recepción», «En la dependencia» y sus trámites. Responde «¿qué tiene hoy el Decanato?».</p></div>
+        <div class="panel"><h3>Notificaciones</h3><p class="small">Avisos de asignaciones, movimientos y plazos. Abrir uno lo marca como leído.</p></div>
+        <div class="panel"><h3>Descargas</h3><p class="small">Los enlaces duran 60 segundos por seguridad. Si tarda, pulse <span class="ui">Descargar</span> de nuevo.</p></div>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section class="chapter" id="reportes" aria-labelledby="h-reportes">
+      <div class="ch-head"><span class="ch-num">10</span><h2 id="h-reportes">Reportes y exportaciones</h2><p class="who"><span class="tag">Todo el personal</span></p></div>
+      <div class="plate">
+        <ol class="steps" style="--n:4">
+          <li><h3>Elija el reporte</h3><p>En la lista de la izquierda de <b>Reportes</b>.</p></li>
+          <li><h3>Ajuste filtros</h3><p>Fechas, dirección, estado, dependencia, prioridad, responsable.</p></li>
+          <li><h3>Genere</h3><p><span class="ui primary">Generar reporte</span> muestra la vista previa.</p></li>
+          <li><h3>Exporte</h3><p><span class="ui">Exportar resultado</span>: hasta 5000 filas.</p></li>
+        </ol>
+      </div>
+      <div class="formats"><span class="small">Formatos:</span><span class="fmt">Excel .xlsx</span><span class="fmt">CSV .csv</span><span class="fmt">PDF .pdf</span></div>
+      <div class="reports">
+        <div class="report"><b>Documentos entrantes</b><span>Remitente, recepción, estado y responsable.</span></div>
+        <div class="report"><b>Documentos salientes</b><span>Con la fecha de cada paso de la ruta.</span></div>
+        <div class="report"><b>Por dependencia</b><span>Totales: pendientes, en espera, vencidos, cerrados.</span></div>
+        <div class="report"><b>Pendientes por dependencia</b><span>Documentos abiertos agrupados por ubicación.</span></div>
+        <div class="report"><b>Trámites pendientes</b><span>Responsable, plazo y próxima acción.</span></div>
+        <div class="report"><b>Trámites vencidos</b><span>Abiertos con fecha límite pasada.</span></div>
+        <div class="report"><b>Documentos completados</b><span>Completados o archivados.</span></div>
+        <div class="report"><b>Historial de movimientos</b><span>Cada paso con autor y hora.</span></div>
+        <div class="report"><b>Resumen de actividad</b><span>Conteo de registros y movimientos del período.</span></div>
+      </div>
+      <div class="note"><svg width="18" height="18"><use href="#i-eye"/></svg><p>Cada reporte incluye solo lo que su cuenta puede ver y nunca los archivos adjuntos. Atajo: el botón <span class="ui">Exportar</span> de cada listado descarga la lista con sus filtros actuales.</p></div>
+    </section>
+
+    <!-- 11 -->
+    <section class="chapter" id="administracion" aria-labelledby="h-admin">
+      <div class="ch-head"><span class="ch-num">11</span><h2 id="h-admin">Administración</h2><p class="who"><span class="tag admin">Solo administradores</span></p></div>
+      <div class="plate">
+        <ol class="steps" style="--n:4">
+          <li><h3>Agregar personal</h3><p>Administración → Usuarios → <span class="ui primary">Agregar personal</span>.</p></li>
+          <li><h3>Datos y rol</h3><p>Correo, nombre, cargo. Ante la duda: <b>Personal de consulta</b>.</p></li>
+          <li><h3>Contraseña temporal</h3><p>Se muestra una sola vez: <span class="ui">Copiar</span>.</p></li>
+          <li><h3>Entréguela</h3><p>En persona o por un canal seguro.</p></li>
+        </ol>
+        <p class="plate-cap"><b>Lámina 5</b>Alta de una persona. La invitación por correo solo funciona si la institución configuró el envío de correos.</p>
+      </div>
+      <div class="grid-2">
+        <div class="panel"><h3>Usuarios</h3><p class="small">Cambie el rol en la lista de la fila, edite datos o use <span class="ui">Suspender</span> cuando alguien deje la institución: pierde el acceso al instante y su historial se conserva. <span class="ui">Reactivar</span> lo devuelve.</p></div>
+        <div class="panel"><h3>Dependencias y catálogos</h3><p class="small">Agregue oficinas, tipos de documento, categorías y prioridades. Para dejar de usar un valor, desmarque <b>Activo</b>. Las tres dependencias de la ruta están protegidas.</p></div>
+        <div class="panel"><h3>Auditoría</h3><p class="small">Quién hizo cada cambio, cuándo y qué cambió. No se puede borrar ni modificar.</p></div>
+        <div class="panel"><h3>Su propia cuenta</h3><p class="small">No puede cambiar su rol ni suspenderse. Siempre debe quedar al menos un administrador activo.</p></div>
+      </div>
+      <div class="scroll">
+        <table class="params">
+          <thead><tr><th scope="col">Parámetro</th><th scope="col">Qué controla</th><th scope="col">Valor inicial</th></tr></thead>
+          <tbody>
+            <tr><td>Avisar con antelación</td><td>Cuándo un plazo pasa a «próximo a vencer»</td><td class="v">3 días</td></tr>
+            <tr><td>Días sin movimiento</td><td>Cuándo un documento detenido «requiere atención»</td><td class="v">7 días</td></tr>
+            <tr><td>Tamaño máximo por archivo</td><td>Límite de cada adjunto (1 a 50 MB)</td><td class="v">20 MB</td></tr>
+            <tr><td>Formatos permitidos</td><td>Tipos de archivo aceptados</td><td class="v">8 formatos</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 12 -->
+    <section class="chapter" id="entrenamiento" aria-labelledby="h-ent">
+      <div class="ch-head"><span class="ch-num">12</span><h2 id="h-ent">Plan de entrenamiento</h2><p>Tres sesiones prácticas · duraciones sugeridas</p></div>
+      <div class="sessions">
+        <article class="session">
+          <div class="session-top"><span class="num">Sesión 1 · 45 min</span><h3>Consultar</h3><span class="who"><span class="tag">Todo el personal</span></span></div>
+          <div class="session-body">
+            <div class="bar" aria-hidden="true"><span style="width:33%"></span></div>
+            <ol>
+              <li>Entrar y crear la contraseña.</li>
+              <li>Contar salientes de «Este año» en el panel.</li>
+              <li>Ver pendientes de la Dirección de Investigación.</li>
+              <li>Buscar un oficio y decir dónde está.</li>
+              <li>Filtrar «Remitido al Decanato» y exportar a Excel.</li>
+              <li>Ver qué tiene hoy el Decanato.</li>
+              <li>Descargar un adjunto, abrir un aviso, salir.</li>
+            </ol>
+          </div>
+        </article>
+        <article class="session">
+          <div class="session-top"><span class="num">Sesión 2 · 60 min</span><h3>Registrar</h3><span class="who"><span class="tag admin">Administradores</span></span></div>
+          <div class="session-body">
+            <div class="bar" aria-hidden="true"><span style="width:66%"></span></div>
+            <ol>
+              <li>Registrar «PRUEBA – Solicitud de aval».</li>
+              <li>Adjuntar un PDF y descargarlo.</li>
+              <li>Remitir a la Dirección y comprobar que no se ofrece el Decanato.</li>
+              <li>Registrar recepción, remisión y recepción en el Decanato.</li>
+              <li>Registrar un entrante sin número y trasladarlo.</li>
+              <li>Cambiar el responsable y ver su aviso.</li>
+              <li>Restringir un documento y autorizar a alguien.</li>
+            </ol>
+          </div>
+        </article>
+        <article class="session">
+          <div class="session-top"><span class="num">Sesión 3 · 45 min</span><h3>Gestionar</h3><span class="who"><span class="tag admin">Administradores</span></span></div>
+          <div class="session-body">
+            <div class="bar" aria-hidden="true"><span style="width:100%"></span></div>
+            <ol>
+              <li>Registrar un error y corregirlo.</li>
+              <li>Crear un trámite y completarlo.</li>
+              <li>Dar de alta a un compañero; suspenderlo y reactivarlo.</li>
+              <li>Agregar y desactivar un tipo de documento.</li>
+              <li>Revisar la sesión en Auditoría.</li>
+              <li>Completar y archivar las pruebas.</li>
+            </ol>
+          </div>
+        </article>
+      </div>
+      <div class="note"><svg width="18" height="18"><use href="#i-info"/></svg><p>Antes de empezar, el instructor crea la cuenta del participante con contraseña temporal. Use asuntos que empiecen con «PRUEBA –»: los documentos no se borran, se completan y se archivan.</p></div>
+      <div class="checks">
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><h3>Competencias: consulta</h3><span class="progress" id="prog-a">0/7</span></div>
+          <ul class="checklist" data-group="a">
+            <li><label for="ca1"><input type="checkbox" id="ca1">Inicia sesión, cambia su contraseña y sale.</label></li>
+            <li><label for="ca2"><input type="checkbox" id="ca2">Encuentra un documento por número, asunto o remitente.</label></li>
+            <li><label for="ca3"><input type="checkbox" id="ca3">Explica dónde está un documento y qué paso falta.</label></li>
+            <li><label for="ca4"><input type="checkbox" id="ca4">Filtra, ordena y restablece una lista.</label></li>
+            <li><label for="ca5"><input type="checkbox" id="ca5">Interpreta los indicadores y las alertas.</label></li>
+            <li><label for="ca6"><input type="checkbox" id="ca6">Descarga un adjunto y exporta un reporte.</label></li>
+            <li><label for="ca7"><input type="checkbox" id="ca7">Revisa y marca sus notificaciones.</label></li>
+          </ul>
+        </div>
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><h3>Competencias: administración</h3><span class="progress" id="prog-b">0/9</span></div>
+          <ul class="checklist" data-group="b">
+            <li><label for="cb1"><input type="checkbox" id="cb1">Registra salientes y entrantes completos.</label></li>
+            <li><label for="cb2"><input type="checkbox" id="cb2">Registra cada paso de la ruta, incluidas las recepciones.</label></li>
+            <li><label for="cb3"><input type="checkbox" id="cb3">Adjunta, reemplaza y retira archivos con motivo.</label></li>
+            <li><label for="cb4"><input type="checkbox" id="cb4">Asigna responsables y fechas límite.</label></li>
+            <li><label for="cb5"><input type="checkbox" id="cb5">Restringe un documento y autoriza el acceso.</label></li>
+            <li><label for="cb6"><input type="checkbox" id="cb6">Corrige un movimiento y explica por qué el original se conserva.</label></li>
+            <li><label for="cb7"><input type="checkbox" id="cb7">Crea y cierra trámites.</label></li>
+            <li><label for="cb8"><input type="checkbox" id="cb8">Da de alta, suspende y reactiva cuentas.</label></li>
+            <li><label for="cb9"><input type="checkbox" id="cb9">Consulta la bitácora de auditoría.</label></li>
+          </ul>
+        </div>
+      </div>
+      <p class="small">Las casillas se guardan solo en este navegador, como apoyo durante la práctica.</p>
+    </section>
+
+    <!-- 13 -->
+    <section class="chapter" id="ayuda" aria-labelledby="h-ayuda">
+      <div class="ch-head"><span class="ch-num">13</span><h2 id="h-ayuda">Ayuda y glosario</h2><p>Pulse una pregunta para ver la respuesta</p></div>
+      <div class="faq">
+        <details><summary>No veo un documento que sé que existe.</summary><p>Puede estar archivado (filtre <b>Situación → Todos</b>) o ser restringido. Pida acceso al administrador.</p></details>
+        <details><summary>No aparece el botón para remitir al Decanato.</summary><p>Es correcto: primero debe registrarse la recepción en la Dirección de Investigación. La ruta no se puede saltar.</p></details>
+        <details><summary>Me equivoqué al registrar un movimiento.</summary><p>Use <span class="ui">Corregir último</span> con el motivo. El historial no se borra; queda la corrección.</p></details>
+        <details><summary>Quiero borrar un documento.</summary><p>No es posible: los registros institucionales se conservan. Complételo y archívelo.</p></details>
+        <details><summary>Dice «El documento cambió mientras se registraba el movimiento».</summary><p>Otra persona registró un paso al mismo tiempo. Actualice la página y revise la etapa antes de repetir.</p></details>
+        <details><summary>Dice «Ya existe un documento con ese número oficial».</summary><p>Ese oficio ya está registrado. Búsquelo antes de crear otro.</p></details>
+        <details><summary>El archivo no se carga.</summary><p>Revise el formato y el tamaño. Si dice que el contenido no corresponde a la extensión, el archivo está dañado o fue renombrado: vuelva a guardarlo desde su programa original.</p></details>
+        <details><summary>Olvidé mi contraseña.</summary><p>Pida al administrador una contraseña temporal nueva.</p></details>
+        <details><summary>Las fechas del calendario aparecen como mm/dd/aaaa.</summary><p>El calendario usa el idioma del navegador. Configure Chrome en español; la plataforma siempre muestra las fechas como DD/MM/AAAA.</p></details>
+      </div>
+      <div class="plate states">
+        <div class="state-row"><span class="lbl">Salientes</span><div class="state-chips">
+          <span class="chip navy">Registrado en INEDUC</span><span class="sep">→</span><span class="chip warn">Remitido a la Dirección</span><span class="sep">→</span><span class="chip info">Recibido en la Dirección</span><span class="sep">→</span><span class="chip info">En gestión</span><span class="sep">→</span><span class="chip warn">Remitido al Decanato</span><span class="sep">→</span><span class="chip info">Recibido en el Decanato</span><span class="sep">→</span><span class="chip info">En seguimiento</span><span class="sep">→</span><span class="chip ok">Completado</span><span class="sep">→</span><span class="chip gray">Archivado</span>
+        </div></div>
+        <div class="state-row"><span class="lbl">Entrantes</span><div class="state-chips">
+          <span class="chip navy">Recibido</span><span class="chip info">En revisión</span><span class="chip info">En trámite</span><span class="chip warn">Remitido</span><span class="chip warn">En espera de respuesta</span><span class="chip info">En seguimiento</span><span class="chip ok">Completado</span><span class="chip gray">Archivado</span>
+        </div></div>
+        <div class="state-row"><span class="lbl">Trámites</span><div class="state-chips">
+          <span class="chip navy">Pendiente</span><span class="chip info">En proceso</span><span class="chip info">En revisión</span><span class="chip warn">En espera de respuesta</span><span class="chip ok">Completado</span><span class="chip gray">Cancelado</span>
+        </div></div>
+        <div class="state-row"><span class="lbl">Avisos</span><div class="state-chips">
+          <span class="chip red">Vencido</span><span class="chip warn">Próximo a vencer</span><span class="chip warn">Sin movimiento</span><span class="small">No son estados: los calcula el sistema.</span>
+        </div></div>
+        <p class="plate-cap"><b>Lámina 6</b>Los colores coinciden con las etiquetas que verá en la plataforma.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="colophon gutter">
+  <div class="inner">
+    <span>SIGED-INEDUC · Instituto de Investigación e Innovación Educativa · Facultad de Ciencias de la Educación · UASD</span>
+    <span>Manual de uso · versión 1.0 · octubre de 2026</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Pestañas de procedimientos (con teclado: flechas izquierda/derecha).
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
+  tabs.forEach(function (t, i) {
+    t.tabIndex = i === 0 ? 0 : -1;
+    t.addEventListener('click', function () { select(t); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      var n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+      select(n); n.focus();
+    });
+  });
+
+  // Lista de competencias: progreso y memoria local por navegador.
+  var KEY = 'siged-manual-checks';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { saved = {}; }
+  function update() {
+    ['a', 'b'].forEach(function (g) {
+      var boxes = document.querySelectorAll('.checklist[data-group="' + g + '"] input');
+      var done = 0;
+      boxes.forEach(function (b) { if (b.checked) done++; });
+      document.getElementById('prog-' + g).textContent = done + '/' + boxes.length;
+    });
+  }
+  document.querySelectorAll('.checklist input').forEach(function (b) {
+    if (saved[b.id]) b.checked = true;
+    b.addEventListener('change', function () {
+      saved[b.id] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      update();
+    });
+  });
+  update();
+})();
+</script>
+</body>
+</html>

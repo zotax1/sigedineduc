@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BookOpenText } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import { Alert } from "@/components/ui/misc";
 import { LoginForm } from "./login-form";
 
@@ -27,6 +29,18 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           ¿Olvidó su contraseña?
         </Link>
       </p>
+      <div className="border-t border-border pt-6">
+        {/* Página estática en public/; se abre aparte para no perder el formulario. */}
+        <a
+          href="/manual-usuario.html"
+          target="_blank"
+          rel="noopener"
+          className={buttonVariants({ variant: "outline", size: "lg", className: "w-full tracking-wide" })}
+        >
+          <BookOpenText aria-hidden />
+          MANUAL DE USUARIO PLATAFORMA
+        </a>
+      </div>
       <p className="text-center text-xs text-muted-foreground">
         Las cuentas se crean por invitación del administrador del sistema.
       </p>
