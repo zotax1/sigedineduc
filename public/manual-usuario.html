@@ -130,7 +130,8 @@ main { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 
 .chip.gray { background: #eef0f3; color: #5b6474; }
 .chip.red { background: #fbeaea; color: var(--app-red); }
 .defs { display: grid; gap: 12px; margin: 0; }
-.defs div { display: grid; grid-template-columns: 28px 1fr; gap: 10px; }
+.defs > div { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; }
+.defs > div > div { display: grid; gap: 2px; }
 .defs dt { font-weight: 700; }
 .defs dd { margin: 0; color: #3d2f28; font-size: 15px; }
 
