@@ -30,10 +30,10 @@ const C = {
 
 const axisProps = { stroke: C.axis, fontSize: 12, tickLine: false, axisLine: false } as const;
 const tooltipStyle = {
-  contentStyle: { borderRadius: 8, border: "1px solid var(--border)", fontSize: 13, boxShadow: "0 4px 16px rgba(15,23,42,.08)" },
+  contentStyle: { borderRadius: 8, border: "1px solid var(--border)", fontSize: 13, boxShadow: "0 4px 16px rgba(43,16,18,.08)" },
   labelStyle: { fontWeight: 600, color: "var(--foreground)" },
   itemStyle: { color: "var(--foreground)" },
-  cursor: { fill: "rgba(22,50,92,0.06)" },
+  cursor: { fill: "rgba(94,23,27,0.06)" },
 };
 
 function ChartCard({

@@ -190,7 +190,8 @@ tests/e2e/             Pruebas de navegador (Playwright)
 ## Limitaciones conocidas
 
 - **No se ha desplegado** en Supabase ni Vercel desde este entorno (no se disponía de credenciales). Todo se verificó contra el stack local oficial de Supabase y la compilación de producción de Next.js.
-- El **logotipo** es una identidad textual provisional; no se reproducen logotipos oficiales. Puede reemplazarse en `src/components/layout/brand.tsx`.
+- Los **logotipos institucionales** (INEDUC y Facultad de Ciencias de la Educación) están en `public/brand/` y se muestran en la cabecera de las pantallas de acceso (`src/app/(auth)/layout.tsx`). La barra lateral interna conserva la identidad textual «SG» (`src/components/layout/brand.tsx`).
+- La **paleta institucional** (vino `#5E171B`, crema `#FAF6E9`, texto `#2B1012`, superficies `#FFFFFF`) se define una sola vez como variables en `src/app/globals.css`; los reportes XLSX/PDF usan los mismos valores en `src/lib/reports/exporters.ts`.
 - Los **selectores de fecha** son los nativos del navegador: su formato visual depende del idioma del navegador (en navegadores en español se muestran como DD/MM/AAAA). Las fechas mostradas por la aplicación siempre usan DD/MM/AAAA.
 - Las **notificaciones por correo** de eventos internos no están implementadas (solo notificaciones en la aplicación). Supabase envía únicamente los correos de invitación y recuperación.
 - Las **excepciones institucionales a la ruta** no están implementadas a propósito: la ruta se aplica sin excepciones. Solo existe la corrección (reversión) auditada del último movimiento.

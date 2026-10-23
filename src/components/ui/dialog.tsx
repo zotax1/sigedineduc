@@ -17,7 +17,7 @@ export function DialogContent({
 }: React.ComponentProps<typeof D.Content> & { side?: "left" }) {
   return (
     <D.Portal>
-      <D.Overlay className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-[1px]" />
+      <D.Overlay className="fixed inset-0 z-50 bg-[#2b1012]/40 backdrop-blur-[1px]" />
       <D.Content
         className={cn(
           side === "left"

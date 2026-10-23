@@ -35,7 +35,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           href="/manual-usuario.html"
           target="_blank"
           rel="noopener"
-          className={buttonVariants({ variant: "outline", size: "lg", className: "w-full tracking-wide" })}
+          className={buttonVariants({ variant: "outline", size: "lg", className: "h-auto min-h-11 w-full whitespace-normal py-2.5 text-center tracking-wide" })}
         >
           <BookOpenText aria-hidden />
           MANUAL DE USUARIO PLATAFORMA

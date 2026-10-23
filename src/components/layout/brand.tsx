@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Identidad textual provisional. No reproduce logotipos oficiales de la UASD
- * ni de INEDUC; puede sustituirse por un logotipo autorizado en
- * /public/logo-institucional.svg (ver README).
+ * Identidad textual de la aplicación para la barra lateral. Los logotipos
+ * institucionales (INEDUC y FCE) están en /public/brand y se muestran en las
+ * pantallas de acceso (ver README).
  */
 export function BrandMark({ className }: { className?: string }) {
   return (

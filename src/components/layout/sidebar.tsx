@@ -30,13 +30,13 @@ function NavList({ isAdmin, unread, onNavigate }: { isAdmin: boolean; unread: nu
             aria-current={active ? "page" : undefined}
             className={cn(
               "group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-sidebar-foreground/85 transition-colors hover:bg-sidebar-active/70 hover:text-white focus-visible:outline-white",
-              active && "bg-sidebar-active text-white shadow-[inset_3px_0_0_0_#7fb0e6]",
+              active && "bg-sidebar-active text-white shadow-[inset_3px_0_0_0_var(--sidebar-accent)]",
             )}
           >
             <Icon className="size-[18px] shrink-0 opacity-90" aria-hidden />
             <span className="truncate">{item.label}</span>
             {item.href === "/notificaciones" && unread > 0 && (
-              <span className="ml-auto rounded-full bg-[#d08a18] px-1.5 py-0.5 text-[11px] font-semibold leading-none text-white">
+              <span className="ml-auto rounded-full bg-sidebar-accent px-1.5 py-0.5 text-[11px] font-semibold leading-none text-primary">
                 {unread > 99 ? "99+" : unread}
                 <span className="sr-only"> sin leer</span>
               </span>

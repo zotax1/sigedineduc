@@ -32,15 +32,15 @@ export async function toXlsx(report: Report, generatedAt = new Date()): Promise<
   wb.creator = "SIGED-INEDUC";
   wb.created = generatedAt;
   const ws = wb.addWorksheet(report.title.slice(0, 31), { views: [{ state: "frozen", ySplit: 5 + report.filtersSummary.length }] });
-  ws.addRow([`SIGED-INEDUC · ${report.title}`]).font = { bold: true, size: 14, color: { argb: "FF16325C" } };
-  ws.addRow([INSTITUTION]).font = { size: 9, color: { argb: "FF5B6474" } };
-  ws.addRow([`Generado: ${formatDateTime(generatedAt)}`]).font = { size: 9, color: { argb: "FF5B6474" } };
+  ws.addRow([`SIGED-INEDUC · ${report.title}`]).font = { bold: true, size: 14, color: { argb: "FF5E171B" } };
+  ws.addRow([INSTITUTION]).font = { size: 9, color: { argb: "FF6B5154" } };
+  ws.addRow([`Generado: ${formatDateTime(generatedAt)}`]).font = { size: 9, color: { argb: "FF6B5154" } };
   for (const f of report.filtersSummary) ws.addRow([`Filtro: ${f}`]).font = { size: 9 };
   ws.addRow([]);
   const header = ws.addRow(report.columns.map((c) => c.header));
   header.eachCell((cell) => {
     cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
-    cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF16325C" } };
+    cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF5E171B" } };
     cell.alignment = { vertical: "middle", wrapText: true };
   });
   for (const r of report.rows) ws.addRow(report.columns.map((c) => r[c.key] ?? ""));
@@ -57,11 +57,11 @@ export function toPdf(report: Report, generatedAt = new Date()): Uint8Array {
   const width = doc.internal.pageSize.getWidth();
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
-  doc.setTextColor(22, 50, 92);
+  doc.setTextColor(94, 23, 27);
   doc.text(`SIGED-INEDUC · ${report.title}`, 36, 40);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
-  doc.setTextColor(91, 100, 116);
+  doc.setTextColor(107, 81, 84);
   doc.text(INSTITUTION, 36, 54);
   let y = 66;
   doc.text(`Generado: ${formatDateTime(generatedAt)} · ${report.description}`, 36, y);
@@ -74,8 +74,8 @@ export function toPdf(report: Report, generatedAt = new Date()): Uint8Array {
     head: [report.columns.map((c) => c.header)],
     body: report.rows.map((r) => report.columns.map((c) => String(r[c.key] ?? ""))),
     styles: { fontSize: report.columns.length > 9 ? 6.5 : 8, cellPadding: 3, overflow: "linebreak" },
-    headStyles: { fillColor: [22, 50, 92], textColor: 255 },
-    alternateRowStyles: { fillColor: [246, 247, 249] },
+    headStyles: { fillColor: [94, 23, 27], textColor: 255 },
+    alternateRowStyles: { fillColor: [250, 246, 233] },
     margin: { left: 36, right: 36 },
     didDrawPage: () => {
       const pages = doc.getNumberOfPages();

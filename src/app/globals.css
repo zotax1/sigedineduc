@@ -1,25 +1,29 @@
 @import "tailwindcss";
 
 /*
- * Identidad visual SIGED-INEDUC: fondo neutro, azul marino institucional como
- * color primario y uso moderado de verde, ámbar y rojo para estados.
+ * Identidad visual SIGED-INEDUC (marca institucional INEDUC / FCE):
+ * rojo vino #5E171B como color primario, crema #FAF6E9 como fondo general,
+ * #2B1012 para el texto y blanco para tarjetas y campos que requieren
+ * contraste. Verde, ámbar y rojo se reservan para estados.
  */
 :root {
-  --background: #f6f7f9;
-  --foreground: #0f172a;
+  --background: #faf6e9;
+  --foreground: #2b1012;
   --card: #ffffff;
-  --card-foreground: #0f172a;
-  --muted: #f1f3f6;
-  --muted-foreground: #5b6474;
-  --border: #e2e6ec;
-  --input: #d5dae2;
-  --ring: #2f5aa8;
+  --card-foreground: #2b1012;
+  --muted: #f3ecda;
+  --muted-foreground: #6b5154;
+  --border: #e6dcc6;
+  --input: #d9ccb2;
+  --ring: #5e171b;
 
-  --primary: #16325c;
-  --primary-hover: #10274a;
+  --primary: #5e171b;
+  --primary-hover: #4a1115;
   --primary-foreground: #ffffff;
-  --primary-soft: #e8eef8;
-  --primary-soft-foreground: #16325c;
+  --primary-soft: #f4e4df;
+  --primary-soft-foreground: #5e171b;
+  --primary-soft-hover: #ecd3cc;
+  --primary-soft-ring: #e5c6bf;
 
   --success: #15803d;
   --success-soft: #e7f5ec;
@@ -30,20 +34,21 @@
   --info: #1d4ed8;
   --info-soft: #e8effd;
 
-  --sidebar: #0f2443;
-  --sidebar-foreground: #dbe4f3;
-  --sidebar-muted: #8fa3c4;
-  --sidebar-active: #1d3d6e;
+  --sidebar: #5e171b;
+  --sidebar-foreground: #f3e6d8;
+  --sidebar-muted: #d9b9b0;
+  --sidebar-active: #7a2329;
+  --sidebar-accent: #faf6e9;
 
-  /* Paleta categórica validada (CVD ΔE ≥ 9) y colores de estado */
-  --series-1: #2a78d6;
-  --series-2: #eb6834;
-  --series-3: #1baf7a;
+  /* Paleta categórica (vino, ocre, verde azulado) y colores de estado */
+  --series-1: #5e171b;
+  --series-2: #c9892b;
+  --series-3: #1b8a7a;
   --status-good: #15803d;
   --status-critical: #c0392b;
-  --status-neutral: #9aa3b2;
-  --chart-grid: #e8ebf0;
-  --chart-axis: #5b6474;
+  --status-neutral: #a89a8c;
+  --chart-grid: #ece3d0;
+  --chart-axis: #6b5154;
 }
 
 @theme inline {
@@ -61,6 +66,8 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-soft: var(--primary-soft);
   --color-primary-soft-foreground: var(--primary-soft-foreground);
+  --color-primary-soft-hover: var(--primary-soft-hover);
+  --color-primary-soft-ring: var(--primary-soft-ring);
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
   --color-warning: var(--warning);
@@ -73,6 +80,7 @@
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-muted: var(--sidebar-muted);
   --color-sidebar-active: var(--sidebar-active);
+  --color-sidebar-accent: var(--sidebar-accent);
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   --radius-lg: 0.75rem;
   --radius-md: 0.5rem;
