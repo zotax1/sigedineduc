@@ -1,6 +1,6 @@
 # Despliegue: Supabase + Vercel
 
-> Estas instrucciones no se han ejecutado contra servicios reales desde el entorno de desarrollo (no se disponía de credenciales). Se verificó todo contra el stack local oficial de Supabase y la compilación de producción.
+> La plataforma está desplegada en Vercel (`sigedineduc`) con Supabase (`siged-ineduc`). Estas instrucciones sirven para reinstalarla o para un entorno nuevo.
 
 ## 1. Proyecto de Supabase
 
@@ -91,4 +91,6 @@ select public.bootstrap_first_admin('correo@uasd.edu.do');
 ## 6. Actualizaciones futuras
 
 - Nuevas migraciones en `supabase/migrations/` → `npx supabase db push`.
+- **Sin CLI:** cada migración posterior a la instalación inicial tiene su archivo en `supabase/deploy/actualizaciones/` (generado con `npm run db:bundle`). Péguelo completo en *SQL Editor → New query* y pulse *Run*, en orden y una sola vez. Si ya estaba aplicado, se detiene sin cambiar nada. Aplíquelo **antes o justo después** de publicar el código: mientras tanto, la sección nueva muestra un aviso en lugar de datos.
+  - `20261023000100_projects.sql`: módulo **Proyectos**.
 - Tras cambiar el esquema, regenere los tipos: `npm run db:types` (local) o `npx supabase gen types typescript --linked`.

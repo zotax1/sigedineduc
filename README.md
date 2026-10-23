@@ -39,6 +39,7 @@ Documentación adicional:
 - **Historial de solo anexado** con actor, origen, destino, fecha y hora del servidor y observaciones. Correcciones mediante **reversión auditada** que conserva el movimiento original.
 - **Adjuntos privados** (PDF, DOC, DOCX, XLS, XLSX, PNG, JPG): verificación del contenido real, carga directa con progreso, descarga con URL firmada de 60 s, retiro y reemplazo auditados.
 - **Trámites y procedimientos** asociados o no a documentos, con estados, responsables, dependencias, plazos e historial. "Vencido" es un indicador calculado.
+- **Proyectos de investigación**: expedientes con código, título, investigador principal, coinvestigadores, facultad o unidad, año y fuente de financiamiento; indicadores (total, en trámite, aprobados, documentos pendientes) y filtros por estado, investigador, año, financiamiento y alertas. Cada **documento especial** (oficio, propuesta, informe de avance o final, presupuesto, aval ético, carta institucional) tiene su propio trámite (Ingresado → En revisión → Pendiente de firma / Enviado a vía / Devuelto → Aprobado → Completado), archivos privados, alertas de firma, prioridad y plazo, y una **línea de tiempo** de solo anexado con observaciones públicas o **notas internas** (solo administradores).
 - **Seguimiento por dependencia**: documentos remitidos esperando recepción y documentos presentes en cada dependencia.
 - **Notificaciones internas** en tiempo real (asignaciones, remisiones, recepciones, plazos, documentos sin movimiento), sin duplicados.
 - **Búsqueda global** y filtros combinables (dirección, fechas, estado, dependencia, prioridad, responsable, tipo, pendientes/completados/archivados, vencidos), ordenación y paginación en servidor.
@@ -189,7 +190,7 @@ tests/e2e/             Pruebas de navegador (Playwright)
 
 ## Limitaciones conocidas
 
-- **No se ha desplegado** en Supabase ni Vercel desde este entorno (no se disponía de credenciales). Todo se verificó contra el stack local oficial de Supabase y la compilación de producción de Next.js.
+- Las **notificaciones** internas aún no cubren los proyectos: sus alertas (firma pendiente, prioridad, plazo vencido) se muestran en el módulo de Proyectos.
 - Los **logotipos institucionales** (INEDUC y Facultad de Ciencias de la Educación) están en `public/brand/` y se muestran en la cabecera de las pantallas de acceso (`src/app/(auth)/layout.tsx`). La barra lateral interna conserva la identidad textual «SG» (`src/components/layout/brand.tsx`).
 - La **paleta institucional** (vino `#5E171B`, crema `#FAF6E9`, texto `#2B1012`, superficies `#FFFFFF`) se define una sola vez como variables en `src/app/globals.css`; los reportes XLSX/PDF usan los mismos valores en `src/lib/reports/exporters.ts`.
 - Los **selectores de fecha** son los nativos del navegador: su formato visual depende del idioma del navegador (en navegadores en español se muestran como DD/MM/AAAA). Las fechas mostradas por la aplicación siempre usan DD/MM/AAAA.

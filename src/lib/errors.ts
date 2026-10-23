@@ -15,6 +15,7 @@ export function friendlyError(error: MaybePgError, fallback = "No se pudo comple
   switch (error.code) {
     case "23505":
       if (/official_number/.test(message)) return "Ya existe un documento con ese número oficial.";
+      if (/projects_code/.test(message)) return "Ya existe un proyecto con ese código.";
       return "Ya existe un registro con esos datos.";
     case "23514":
       return "Algunos datos no cumplen las reglas de validación. Revise los campos obligatorios.";

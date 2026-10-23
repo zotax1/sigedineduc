@@ -9,10 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input, Textarea } from "@/components/ui/input";
 import { EmptyState, FormField } from "@/components/ui/misc";
-import { EXTENSION_LABELS, MIME_BY_EXTENSION, extensionOf, precheckFile, type SupportedExtension } from "@/lib/files";
+import { EXTENSION_LABELS, precheckFile, type SupportedExtension } from "@/lib/files";
+import { uploadWithProgress } from "@/lib/upload-client";
 import { formatDateTime, formatFileSize } from "@/lib/format";
 import { finalizeAttachment, prepareAttachmentUpload, removeAttachment } from "@/lib/actions/attachments";
-import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/supabase/public-config";
 
 export type AttachmentRow = {
   id: string;
@@ -25,27 +25,6 @@ export type AttachmentRow = {
   removed_at: string | null;
   removal_reason: string | null;
 };
-
-function uploadWithProgress(path: string, token: string, file: File, onProgress: (pct: number) => void) {
-  const base = SUPABASE_URL!;
-  const key = SUPABASE_PUBLISHABLE_KEY!;
-  const ext = extensionOf(file.name) as SupportedExtension;
-  const url = `${base}/storage/v1/object/upload/sign/documentos/${path.split("/").map(encodeURIComponent).join("/")}?token=${encodeURIComponent(token)}`;
-  return new Promise<void>((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("PUT", url);
-    xhr.setRequestHeader("apikey", key);
-    xhr.setRequestHeader("x-upsert", "false");
-    xhr.setRequestHeader("cache-control", "max-age=3600");
-    xhr.setRequestHeader("content-type", MIME_BY_EXTENSION[ext] ?? "application/octet-stream");
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
-    };
-    xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`HTTP ${xhr.status}`)));
-    xhr.onerror = () => reject(new Error("Error de red"));
-    xhr.send(file);
-  });
-}
 
 function UploadDialog({
   documentId,

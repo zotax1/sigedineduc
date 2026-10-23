@@ -23,6 +23,10 @@ Todas las estructuras se crean con migraciones en `supabase/migrations/` (aplica
 | `document_attachments` | Metadatos de adjuntos (archivo en Storage) |
 | `document_route_events` | Historial de movimientos, solo anexado |
 | `procedures`, `procedure_events` | Trámites y su historial (solo anexado) |
+| `projects` | Proyectos de investigación (código único, IP, coinvestigadores, unidad, año, financiamiento, estado) |
+| `project_documents` | Documentos especiales de cada proyecto, con su propio estado, prioridad y fecha límite |
+| `project_files` | Metadatos de los archivos de proyectos (Storage: `proyectos/<proyecto>/<documento>/`) |
+| `project_events` | Línea de tiempo del proyecto, solo anexado; `is_internal` marca notas visibles solo para administradores |
 | `notifications` | Notificaciones por destinatario, sin duplicados (`dedupe_key`) |
 | `audit_logs` | Bitácora de auditoría, solo anexado |
 | `document_counters`, `procedure_counters` | Numeración interna (`SIGED-S-2026-00001`, `TRM-2026-00001`) |
@@ -35,7 +39,7 @@ Todas las estructuras se crean con migraciones en `supabase/migrations/` (aplica
 
 ## Vistas (`security_invoker`, aplican la RLS de quien consulta)
 
-`document_overview`, `procedure_overview`, `route_event_overview`, `procedure_event_overview`: añaden nombres legibles e indicadores calculados (`is_overdue`, `is_due_soon`, `awaiting_handoff`, `is_stale`, `days_to_due`) con la fecha de Santo Domingo.
+`document_overview`, `procedure_overview`, `route_event_overview`, `procedure_event_overview`, `project_overview`, `project_document_overview`, `project_file_overview`, `project_event_overview`: añaden nombres legibles e indicadores calculados (`is_overdue`, `is_due_soon`, `awaiting_handoff`, `is_stale`, `days_to_due`) con la fecha de Santo Domingo.
 
 ## Funciones públicas (RPC)
 
@@ -47,6 +51,7 @@ Todas las estructuras se crean con migraciones en `supabase/migrations/` (aplica
 | `add_document_observation` | Observación en el historial | Administrador |
 | `remove_attachment` | Retirar un adjunto con motivo | Administrador |
 | `change_procedure_status`, `add_procedure_observation` | Trámites | Administrador |
+| `change_project_status`, `change_project_document_status`, `add_project_note`, `remove_project_file` | Proyectos (el estado solo cambia por estas funciones; rechazar, cancelar y devolver exigen motivo) | Administrador |
 | `admin_set_user_role`, `admin_set_user_status`, `admin_update_user_profile` | Usuarios | Administrador |
 | `update_my_profile`, `mark_all_notifications_read`, `dashboard_summary`, `refresh_deadline_notifications`, `log_report_export`, `get_outgoing_route_definition` | Uso general | Personal activo |
 | `bootstrap_first_admin`, `purge_demo_data` | Despliegue | Solo rol de servicio |

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { addDaysISO, toIlikePattern } from "@/lib/format";
-import { INCOMING_STATUSES, PROCEDURE_STATUSES, type DocumentDirection } from "@/lib/domain";
+import { INCOMING_STATUSES, PROCEDURE_STATUSES, PROJECT_APPROVED_STATUSES, PROJECT_STATUSES, type DocumentDirection } from "@/lib/domain";
 import { OUTGOING_STAGES } from "@/lib/workflow/outgoing";
 
 /**
@@ -207,6 +207,75 @@ export function hasActiveProcedureFilters(f: ProcedureFilters) {
   return Boolean(
     f.q || f.status || f.department || f.priority || f.responsible || f.document || f.from || f.to || f.overdue || f.dueSoon || f.scope !== "abiertos",
   );
+}
+
+// ---------------------------------------------------------------------------
+// Proyectos
+// ---------------------------------------------------------------------------
+export const PROJECT_SORTS = {
+  actualizacion: { column: "updated_at", label: "Última actividad" },
+  codigo: { column: "code", label: "Código" },
+  titulo: { column: "title", label: "Título" },
+  anio: { column: "year", label: "Año" },
+  pendientes: { column: "documents_pending", label: "Documentos pendientes" },
+} as const;
+
+export type ProjectSortKey = keyof typeof PROJECT_SORTS;
+
+export const PROJECT_ALERTS = {
+  cualquiera: "Con alguna alerta",
+  firma: "Documentos por firmar",
+  prioridad: "Trámite prioritario",
+  vencidos: "Documentos vencidos",
+} as const;
+
+export type ProjectAlertKey = keyof typeof PROJECT_ALERTS;
+
+export type ProjectFilters = {
+  q?: string;
+  status?: (typeof PROJECT_STATUSES)[number] | "APROBADOS";
+  investigator?: string;
+  year?: number;
+  funding?: string;
+  alert?: ProjectAlertKey;
+  sort: ProjectSortKey;
+  dir: "asc" | "desc";
+  page: number;
+};
+
+export function parseProjectFilters(params: SearchParams): ProjectFilters {
+  const year = Number.parseInt(first(params.anio) ?? "", 10);
+  return {
+    q: first(params.q)?.slice(0, 120),
+    status: pick(z.enum([...PROJECT_STATUSES, "APROBADOS"]), first(params.estado)),
+    investigator: first(params.investigador)?.slice(0, 200),
+    year: year >= 2000 && year <= 2100 ? year : undefined,
+    funding: first(params.financiamiento)?.slice(0, 200),
+    alert: pick(z.enum(Object.keys(PROJECT_ALERTS) as [ProjectAlertKey]), first(params.alerta)),
+    sort: pick(z.enum(Object.keys(PROJECT_SORTS) as [ProjectSortKey]), first(params.orden)) ?? "actualizacion",
+    dir: first(params.sentido) === "asc" ? "asc" : "desc",
+    page: Math.max(1, Math.min(10_000, Number.parseInt(first(params.pagina) ?? "1", 10) || 1)),
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function applyProjectFilters<Q extends { eq: any; ilike: any; gt: any; in: any }>(query: Q, f: ProjectFilters): Q {
+  let q = query;
+  if (f.q) q = q.ilike("search_text", toIlikePattern(f.q));
+  if (f.status === "APROBADOS") q = q.in("status", [...PROJECT_APPROVED_STATUSES]);
+  else if (f.status) q = q.eq("status", f.status);
+  if (f.investigator) q = q.eq("principal_investigator", f.investigator);
+  if (f.year) q = q.eq("year", f.year);
+  if (f.funding) q = q.eq("funding_source", f.funding);
+  if (f.alert === "cualquiera") q = q.eq("has_alerts", true);
+  if (f.alert === "firma") q = q.gt("documents_pending_signature", 0);
+  if (f.alert === "prioridad") q = q.gt("documents_priority", 0);
+  if (f.alert === "vencidos") q = q.gt("documents_overdue", 0);
+  return q;
+}
+
+export function hasActiveProjectFilters(f: ProjectFilters) {
+  return Boolean(f.q || f.status || f.investigator || f.year || f.funding || f.alert);
 }
 
 /** Construye la cadena de consulta conservando los filtros y cambiando algunos. */

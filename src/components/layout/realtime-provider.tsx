@@ -24,7 +24,17 @@ export function useRealtime() {
   return useContext(RealtimeContext);
 }
 
-const WATCHED_TABLES = ["documents", "document_route_events", "procedures", "procedure_events", "document_attachments"] as const;
+const WATCHED_TABLES = [
+  "documents",
+  "document_route_events",
+  "procedures",
+  "procedure_events",
+  "document_attachments",
+  "projects",
+  "project_documents",
+  "project_files",
+  "project_events",
+] as const;
 
 /**
  * Suscripción autenticada a los cambios de la base de datos. Supabase aplica

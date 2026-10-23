@@ -523,6 +523,182 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"project_documents": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"due_date": string | null,"id": string,"kind": Database["public"]['Enums']["project_document_kind"],"notes": string | null,"priority_code": string,"project_id": string,"reference": string | null,"status": Database["public"]['Enums']["project_document_status"],"status_changed_at": string,"title": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"due_date"?: string | null,"id"?: string,"kind": Database["public"]['Enums']["project_document_kind"],"notes"?: string | null,"priority_code"?: string,"project_id": string,"reference"?: string | null,"status"?: Database["public"]['Enums']["project_document_status"],"status_changed_at"?: string,"title": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"due_date"?: string | null,"id"?: string,"kind"?: Database["public"]['Enums']["project_document_kind"],"notes"?: string | null,"priority_code"?: string,"project_id"?: string,"reference"?: string | null,"status"?: Database["public"]['Enums']["project_document_status"],"status_changed_at"?: string,"title"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "project_documents_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_documents_priority_code_fkey"
+      columns: ["priority_code"]
+isOneToOne: false
+      referencedRelation: "priorities"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "project_documents_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "project_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_documents_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_documents_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"project_events": {
+                  Row: {
+                    "changes": Json | null,"event_type": Database["public"]['Enums']["project_event_type"],"file_id": string | null,"from_status": string | null,"id": string,"is_internal": boolean,"notes": string | null,"occurred_at": string,"project_document_id": string | null,"project_id": string,"recorded_by": string | null,"seq": number,"to_status": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "changes"?: Json | null,"event_type": Database["public"]['Enums']["project_event_type"],"file_id"?: string | null,"from_status"?: string | null,"id"?: string,"is_internal"?: boolean,"notes"?: string | null,"occurred_at"?: string,"project_document_id"?: string | null,"project_id": string,"recorded_by"?: string | null,"seq"?: never,"to_status"?: string | null
+                  }
+                  Update: {
+                    "changes"?: Json | null,"event_type"?: Database["public"]['Enums']["project_event_type"],"file_id"?: string | null,"from_status"?: string | null,"id"?: string,"is_internal"?: boolean,"notes"?: string | null,"occurred_at"?: string,"project_document_id"?: string | null,"project_id"?: string,"recorded_by"?: string | null,"seq"?: never,"to_status"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "project_events_file_id_fkey"
+      columns: ["file_id"]
+isOneToOne: false
+      referencedRelation: "project_file_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_file_id_fkey"
+      columns: ["file_id"]
+isOneToOne: false
+      referencedRelation: "project_files"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_project_document_id_fkey"
+      columns: ["project_document_id"]
+isOneToOne: false
+      referencedRelation: "project_document_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_project_document_id_fkey"
+      columns: ["project_document_id"]
+isOneToOne: false
+      referencedRelation: "project_documents"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "project_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_recorded_by_fkey"
+      columns: ["recorded_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"project_files": {
+                  Row: {
+                    "extension": string,"id": string,"mime_type": string,"original_filename": string,"project_document_id": string,"project_id": string,"removal_reason": string | null,"removed_at": string | null,"removed_by": string | null,"size_bytes": number,"storage_path": string,"uploaded_at": string,"uploaded_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "extension": string,"id"?: string,"mime_type": string,"original_filename": string,"project_document_id": string,"project_id": string,"removal_reason"?: string | null,"removed_at"?: string | null,"removed_by"?: string | null,"size_bytes": number,"storage_path": string,"uploaded_at"?: string,"uploaded_by"?: string | null
+                  }
+                  Update: {
+                    "extension"?: string,"id"?: string,"mime_type"?: string,"original_filename"?: string,"project_document_id"?: string,"project_id"?: string,"removal_reason"?: string | null,"removed_at"?: string | null,"removed_by"?: string | null,"size_bytes"?: number,"storage_path"?: string,"uploaded_at"?: string,"uploaded_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "project_files_project_document_id_fkey"
+      columns: ["project_document_id"]
+isOneToOne: false
+      referencedRelation: "project_document_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_files_project_document_id_fkey"
+      columns: ["project_document_id"]
+isOneToOne: false
+      referencedRelation: "project_documents"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_files_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "project_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_files_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_files_removed_by_fkey"
+      columns: ["removed_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_files_uploaded_by_fkey"
+      columns: ["uploaded_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"projects": {
+                  Row: {
+                    "co_investigators": (string)[],"code": string,"created_at": string,"created_by": string | null,"funding_source": string | null,"id": string,"is_demo": boolean,"principal_investigator": string,"search_text": string,"status": Database["public"]['Enums']["project_status"],"status_changed_at": string,"summary": string | null,"title": string,"unit": string,"updated_at": string,"updated_by": string | null,"year": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "co_investigators"?: (string)[],"code": string,"created_at"?: string,"created_by"?: string | null,"funding_source"?: string | null,"id"?: string,"is_demo"?: boolean,"principal_investigator": string,"search_text"?: string,"status"?: Database["public"]['Enums']["project_status"],"status_changed_at"?: string,"summary"?: string | null,"title": string,"unit"?: string,"updated_at"?: string,"updated_by"?: string | null,"year"?: number
+                  }
+                  Update: {
+                    "co_investigators"?: (string)[],"code"?: string,"created_at"?: string,"created_by"?: string | null,"funding_source"?: string | null,"id"?: string,"is_demo"?: boolean,"principal_investigator"?: string,"search_text"?: string,"status"?: Database["public"]['Enums']["project_status"],"status_changed_at"?: string,"summary"?: string | null,"title"?: string,"unit"?: string,"updated_at"?: string,"updated_by"?: string | null,"year"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "projects_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "projects_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Views: {
@@ -676,6 +852,146 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"project_document_overview": {
+                  Row: {
+                    "created_at": string | null,"created_by": string | null,"created_by_name": string | null,"days_to_due": number | null,"due_date": string | null,"files_count": number | null,"id": string | null,"is_due_soon": boolean | null,"is_overdue": boolean | null,"is_pending": boolean | null,"is_pending_signature": boolean | null,"is_priority": boolean | null,"kind": Database["public"]['Enums']["project_document_kind"] | null,"notes": string | null,"priority_code": string | null,"priority_name": string | null,"priority_weight": number | null,"project_code": string | null,"project_id": string | null,"project_title": string | null,"reference": string | null,"status": Database["public"]['Enums']["project_document_status"] | null,"status_changed_at": string | null,"title": string | null,"updated_at": string | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "project_documents_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_documents_priority_code_fkey"
+      columns: ["priority_code"]
+isOneToOne: false
+      referencedRelation: "priorities"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "project_documents_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "project_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_documents_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"project_event_overview": {
+                  Row: {
+                    "changes": Json | null,"document_kind": Database["public"]['Enums']["project_document_kind"] | null,"document_title": string | null,"event_type": Database["public"]['Enums']["project_event_type"] | null,"file_id": string | null,"from_status": string | null,"id": string | null,"is_internal": boolean | null,"notes": string | null,"occurred_at": string | null,"project_document_id": string | null,"project_id": string | null,"recorded_by": string | null,"recorded_by_name": string | null,"seq": number | null,"to_status": string | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "project_events_file_id_fkey"
+      columns: ["file_id"]
+isOneToOne: false
+      referencedRelation: "project_file_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_file_id_fkey"
+      columns: ["file_id"]
+isOneToOne: false
+      referencedRelation: "project_files"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_project_document_id_fkey"
+      columns: ["project_document_id"]
+isOneToOne: false
+      referencedRelation: "project_document_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_project_document_id_fkey"
+      columns: ["project_document_id"]
+isOneToOne: false
+      referencedRelation: "project_documents"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "project_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_events_recorded_by_fkey"
+      columns: ["recorded_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"project_file_overview": {
+                  Row: {
+                    "extension": string | null,"id": string | null,"original_filename": string | null,"project_document_id": string | null,"project_id": string | null,"removal_reason": string | null,"removed_at": string | null,"size_bytes": number | null,"uploaded_at": string | null,"uploaded_by": string | null,"uploaded_by_name": string | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "project_files_project_document_id_fkey"
+      columns: ["project_document_id"]
+isOneToOne: false
+      referencedRelation: "project_document_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_files_project_document_id_fkey"
+      columns: ["project_document_id"]
+isOneToOne: false
+      referencedRelation: "project_documents"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_files_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "project_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_files_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_files_uploaded_by_fkey"
+      columns: ["uploaded_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"project_overview": {
+                  Row: {
+                    "co_investigators": (string)[] | null,"code": string | null,"created_at": string | null,"created_by": string | null,"created_by_name": string | null,"documents_due_soon": number | null,"documents_overdue": number | null,"documents_pending": number | null,"documents_pending_signature": number | null,"documents_priority": number | null,"documents_total": number | null,"funding_source": string | null,"has_alerts": boolean | null,"id": string | null,"is_approved": boolean | null,"principal_investigator": string | null,"search_text": string | null,"status": Database["public"]['Enums']["project_status"] | null,"status_changed_at": string | null,"summary": string | null,"title": string | null,"unit": string | null,"updated_at": string | null,"updated_by": string | null,"updated_by_name": string | null,"year": number | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "projects_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "projects_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"route_event_overview": {
                   Row: {
                     "action": string | null,"attachment_id": string | null,"created_at": string | null,"document_direction": Database["public"]['Enums']["document_direction"] | null,"document_id": string | null,"document_internal_reference": string | null,"document_official_number": string | null,"document_subject": string | null,"event_type": Database["public"]['Enums']["route_event_type"] | null,"from_department_id": string | null,"from_department_name": string | null,"from_department_short_name": string | null,"from_responsible_id": string | null,"from_status": Database["public"]['Enums']["document_status"] | null,"id": string | null,"is_reversed": boolean | null,"notes": string | null,"occurred_at": string | null,"recorded_by": string | null,"recorded_by_email": string | null,"recorded_by_name": string | null,"reverses_event_id": string | null,"seq": number | null,"to_department_id": string | null,"to_department_name": string | null,"to_department_short_name": string | null,"to_responsible_id": string | null,"to_responsible_name": string | null,"to_status": Database["public"]['Enums']["document_status"] | null
@@ -794,6 +1110,28 @@ isOneToOne: false
         isOneToOne: true
         isSetofReturn: false
       } },
+"add_project_note":
+{ Args: { "p_document_id"?: string,"p_internal"?: boolean,"p_notes": string,"p_project_id": string }; Returns: {
+              "changes": Json | null,
+"event_type": Database["public"]['Enums']["project_event_type"],
+"file_id": string | null,
+"from_status": string | null,
+"id": string,
+"is_internal": boolean,
+"notes": string | null,
+"occurred_at": string,
+"project_document_id": string | null,
+"project_id": string,
+"recorded_by": string | null,
+"seq": number,
+"to_status": string | null
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "project_events"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
 "admin_set_user_role":
 { Args: { "p_role": Database["public"]['Enums']["app_role"],"p_user_id": string }; Returns: {
               "created_at": string,
@@ -897,6 +1235,55 @@ isOneToOne: false
                           SetofOptions: {
         from: "*"
         to: "procedures"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
+"change_project_document_status":
+{ Args: { "p_document_id": string,"p_notes"?: string,"p_status": Database["public"]['Enums']["project_document_status"] }; Returns: {
+              "created_at": string,
+"created_by": string | null,
+"due_date": string | null,
+"id": string,
+"kind": Database["public"]['Enums']["project_document_kind"],
+"notes": string | null,
+"priority_code": string,
+"project_id": string,
+"reference": string | null,
+"status": Database["public"]['Enums']["project_document_status"],
+"status_changed_at": string,
+"title": string,
+"updated_at": string,
+"updated_by": string | null
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "project_documents"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
+"change_project_status":
+{ Args: { "p_notes"?: string,"p_project_id": string,"p_status": Database["public"]['Enums']["project_status"] }; Returns: {
+              "co_investigators": (string)[],
+"code": string,
+"created_at": string,
+"created_by": string | null,
+"funding_source": string | null,
+"id": string,
+"is_demo": boolean,
+"principal_investigator": string,
+"search_text": string,
+"status": Database["public"]['Enums']["project_status"],
+"status_changed_at": string,
+"summary": string | null,
+"title": string,
+"unit": string,
+"updated_at": string,
+"updated_by": string | null,
+"year": number
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "projects"
         isOneToOne: true
         isSetofReturn: false
       } },
@@ -1012,6 +1399,28 @@ isOneToOne: false
         isOneToOne: true
         isSetofReturn: false
       } },
+"remove_project_file":
+{ Args: { "p_file_id": string,"p_reason": string }; Returns: {
+              "extension": string,
+"id": string,
+"mime_type": string,
+"original_filename": string,
+"project_document_id": string,
+"project_id": string,
+"removal_reason": string | null,
+"removed_at": string | null,
+"removed_by": string | null,
+"size_bytes": number,
+"storage_path": string,
+"uploaded_at": string,
+"uploaded_by": string | null
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "project_files"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
 "reverse_last_movement":
 { Args: { "p_document_id": string,"p_expected_status": Database["public"]['Enums']["document_status"],"p_reason": string }; Returns: {
               "action": string,
@@ -1059,7 +1468,7 @@ isOneToOne: false
       } }
           }
           Enums: {
-            "account_status": "ACTIVO"|"SUSPENDIDO","app_role": "ADMINISTRADOR"|"CONSULTA","document_direction": "ENTRANTE"|"SALIENTE","document_status": "REGISTRADO_EN_INEDUC"|"REMITIDO_A_DIRECCION_INVESTIGACION"|"RECIBIDO_EN_DIRECCION_INVESTIGACION"|"EN_GESTION_DIRECCION_INVESTIGACION"|"REMITIDO_DESDE_DIRECCION_INVESTIGACION_A_DECANATO"|"RECIBIDO_EN_DECANATO"|"RECIBIDO"|"EN_REVISION"|"EN_TRAMITE"|"REMITIDO"|"EN_ESPERA_RESPUESTA"|"EN_SEGUIMIENTO"|"COMPLETADO"|"ARCHIVADO","document_visibility": "GENERAL"|"RESTRINGIDO","procedure_event_type": "CREACION"|"CAMBIO_ESTADO"|"REASIGNACION"|"OBSERVACION"|"ACTUALIZACION","procedure_status": "PENDIENTE"|"EN_PROCESO"|"EN_REVISION"|"EN_ESPERA_RESPUESTA"|"COMPLETADO"|"CANCELADO","route_event_type": "REGISTRO"|"TRANSICION"|"MOVIMIENTO"|"OBSERVACION"|"ASIGNACION"|"REVERSION"
+            "account_status": "ACTIVO"|"SUSPENDIDO","app_role": "ADMINISTRADOR"|"CONSULTA","document_direction": "ENTRANTE"|"SALIENTE","document_status": "REGISTRADO_EN_INEDUC"|"REMITIDO_A_DIRECCION_INVESTIGACION"|"RECIBIDO_EN_DIRECCION_INVESTIGACION"|"EN_GESTION_DIRECCION_INVESTIGACION"|"REMITIDO_DESDE_DIRECCION_INVESTIGACION_A_DECANATO"|"RECIBIDO_EN_DECANATO"|"RECIBIDO"|"EN_REVISION"|"EN_TRAMITE"|"REMITIDO"|"EN_ESPERA_RESPUESTA"|"EN_SEGUIMIENTO"|"COMPLETADO"|"ARCHIVADO","document_visibility": "GENERAL"|"RESTRINGIDO","procedure_event_type": "CREACION"|"CAMBIO_ESTADO"|"REASIGNACION"|"OBSERVACION"|"ACTUALIZACION","procedure_status": "PENDIENTE"|"EN_PROCESO"|"EN_REVISION"|"EN_ESPERA_RESPUESTA"|"COMPLETADO"|"CANCELADO","project_document_kind": "OFICIO"|"PROPUESTA"|"INFORME_AVANCE"|"INFORME_FINAL"|"PRESUPUESTO"|"AVAL_ETICO"|"CARTA_INSTITUCIONAL"|"OTRO","project_document_status": "INGRESADO"|"EN_REVISION"|"PENDIENTE_FIRMA"|"ENVIADO_A_VIA"|"DEVUELTO"|"APROBADO"|"COMPLETADO","project_event_type": "CREACION"|"CAMBIO_ESTADO"|"ACTUALIZACION"|"DOCUMENTO_REGISTRADO"|"DOCUMENTO_ESTADO"|"ARCHIVO_CARGADO"|"ARCHIVO_RETIRADO"|"OBSERVACION","project_status": "EN_FORMULACION"|"EN_TRAMITE"|"APROBADO"|"EN_EJECUCION"|"FINALIZADO"|"RECHAZADO"|"CANCELADO","route_event_type": "REGISTRO"|"TRANSICION"|"MOVIMIENTO"|"OBSERVACION"|"ASIGNACION"|"REVERSION"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -1175,7 +1584,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "account_status": ["ACTIVO", "SUSPENDIDO"],"app_role": ["ADMINISTRADOR", "CONSULTA"],"document_direction": ["ENTRANTE", "SALIENTE"],"document_status": ["REGISTRADO_EN_INEDUC", "REMITIDO_A_DIRECCION_INVESTIGACION", "RECIBIDO_EN_DIRECCION_INVESTIGACION", "EN_GESTION_DIRECCION_INVESTIGACION", "REMITIDO_DESDE_DIRECCION_INVESTIGACION_A_DECANATO", "RECIBIDO_EN_DECANATO", "RECIBIDO", "EN_REVISION", "EN_TRAMITE", "REMITIDO", "EN_ESPERA_RESPUESTA", "EN_SEGUIMIENTO", "COMPLETADO", "ARCHIVADO"],"document_visibility": ["GENERAL", "RESTRINGIDO"],"procedure_event_type": ["CREACION", "CAMBIO_ESTADO", "REASIGNACION", "OBSERVACION", "ACTUALIZACION"],"procedure_status": ["PENDIENTE", "EN_PROCESO", "EN_REVISION", "EN_ESPERA_RESPUESTA", "COMPLETADO", "CANCELADO"],"route_event_type": ["REGISTRO", "TRANSICION", "MOVIMIENTO", "OBSERVACION", "ASIGNACION", "REVERSION"]
+            "account_status": ["ACTIVO", "SUSPENDIDO"],"app_role": ["ADMINISTRADOR", "CONSULTA"],"document_direction": ["ENTRANTE", "SALIENTE"],"document_status": ["REGISTRADO_EN_INEDUC", "REMITIDO_A_DIRECCION_INVESTIGACION", "RECIBIDO_EN_DIRECCION_INVESTIGACION", "EN_GESTION_DIRECCION_INVESTIGACION", "REMITIDO_DESDE_DIRECCION_INVESTIGACION_A_DECANATO", "RECIBIDO_EN_DECANATO", "RECIBIDO", "EN_REVISION", "EN_TRAMITE", "REMITIDO", "EN_ESPERA_RESPUESTA", "EN_SEGUIMIENTO", "COMPLETADO", "ARCHIVADO"],"document_visibility": ["GENERAL", "RESTRINGIDO"],"procedure_event_type": ["CREACION", "CAMBIO_ESTADO", "REASIGNACION", "OBSERVACION", "ACTUALIZACION"],"procedure_status": ["PENDIENTE", "EN_PROCESO", "EN_REVISION", "EN_ESPERA_RESPUESTA", "COMPLETADO", "CANCELADO"],"project_document_kind": ["OFICIO", "PROPUESTA", "INFORME_AVANCE", "INFORME_FINAL", "PRESUPUESTO", "AVAL_ETICO", "CARTA_INSTITUCIONAL", "OTRO"],"project_document_status": ["INGRESADO", "EN_REVISION", "PENDIENTE_FIRMA", "ENVIADO_A_VIA", "DEVUELTO", "APROBADO", "COMPLETADO"],"project_event_type": ["CREACION", "CAMBIO_ESTADO", "ACTUALIZACION", "DOCUMENTO_REGISTRADO", "DOCUMENTO_ESTADO", "ARCHIVO_CARGADO", "ARCHIVO_RETIRADO", "OBSERVACION"],"project_status": ["EN_FORMULACION", "EN_TRAMITE", "APROBADO", "EN_EJECUCION", "FINALIZADO", "RECHAZADO", "CANCELADO"],"route_event_type": ["REGISTRO", "TRANSICION", "MOVIMIENTO", "OBSERVACION", "ASIGNACION", "REVERSION"]
           }
         }
 } as const

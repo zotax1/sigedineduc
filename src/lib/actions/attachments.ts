@@ -6,14 +6,8 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { friendlyError, type ActionResult } from "@/lib/errors";
-import { precheckFile, safeStorageName, verifyContent } from "@/lib/files";
-
-const BUCKET = "documentos";
-
-async function settings(supabase: Awaited<ReturnType<typeof createClient>>) {
-  const { data } = await supabase.from("app_settings").select("max_attachment_mb, allowed_extensions").single();
-  return data ?? { max_attachment_mb: 20, allowed_extensions: ["pdf"] };
-}
+import { precheckFile, safeStorageName } from "@/lib/files";
+import { BUCKET, uploadSettings, verifyStoredUpload } from "@/lib/storage-uploads";
 
 /**
  * Paso 1: valida nombre/tamaño y emite una URL de carga firmada de un solo
@@ -31,7 +25,7 @@ export async function prepareAttachmentUpload(input: {
     .safeParse(input);
   if (!parsed.success) return { ok: false, error: "Datos del archivo no válidos." };
   const supabase = await createClient();
-  const cfg = await settings(supabase);
+  const cfg = await uploadSettings(supabase);
   const check = precheckFile(parsed.data.filename, parsed.data.size, cfg.allowed_extensions, cfg.max_attachment_mb);
   if (!check.ok) return { ok: false, error: check.error };
 
@@ -71,25 +65,8 @@ export async function finalizeAttachment(input: {
   if (!path.startsWith(`${documentId}/`) || path.includes("..")) return { ok: false, error: "Ruta de archivo no válida." };
 
   const supabase = await createClient();
-  const cfg = await settings(supabase);
-  const discard = async () => {
-    await supabase.storage.from(BUCKET).remove([path]);
-  };
-
-  const { data: blob, error: downloadError } = await supabase.storage.from(BUCKET).download(path);
-  if (downloadError || !blob) return { ok: false, error: "No se encontró el archivo cargado. Intente de nuevo." };
-
-  const bytes = new Uint8Array(await blob.arrayBuffer());
-  const pre = precheckFile(filename, bytes.byteLength, cfg.allowed_extensions, cfg.max_attachment_mb);
-  if (!pre.ok) {
-    await discard();
-    return { ok: false, error: pre.error };
-  }
-  const content = verifyContent(filename, bytes);
-  if (!content.ok) {
-    await discard();
-    return { ok: false, error: content.error };
-  }
+  const content = await verifyStoredUpload(supabase, path, filename);
+  if (!content.ok) return { ok: false, error: content.error };
 
   const { data, error } = await supabase
     .from("document_attachments")
@@ -99,14 +76,14 @@ export async function finalizeAttachment(input: {
       original_filename: filename.slice(0, 255),
       mime_type: content.mime,
       extension: content.extension,
-      size_bytes: bytes.byteLength,
+      size_bytes: content.size,
       description: description || null,
       replaces_attachment_id: replacesAttachmentId ?? null,
     })
     .select("id")
     .single();
   if (error) {
-    await discard();
+    await content.discard();
     return { ok: false, error: friendlyError(error) };
   }
 

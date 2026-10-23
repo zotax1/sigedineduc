@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseDocumentFilters, parseProcedureFilters, withParams } from "./filters";
+import { hasActiveProjectFilters, parseDocumentFilters, parseProcedureFilters, parseProjectFilters, withParams } from "./filters";
 
 describe("filtros desde la URL", () => {
   it("descarta valores no válidos", () => {
@@ -28,6 +28,14 @@ describe("filtros desde la URL", () => {
     expect(f.status).toBe("COMPLETADO");
     expect(f.dueSoon).toBe(true);
     expect(f.dir).toBe("desc");
+  });
+
+  it("interpreta filtros de proyectos y descarta valores no válidos", () => {
+    const f = parseProjectFilters({ estado: "APROBADOS", anio: "2026", investigador: "Ana Pérez", alerta: "firma", orden: "codigo", sentido: "asc" });
+    expect(f).toMatchObject({ status: "APROBADOS", year: 2026, investigator: "Ana Pérez", alert: "firma", sort: "codigo", dir: "asc" });
+    const bad = parseProjectFilters({ estado: "INVENTADO", anio: "1850", alerta: "todo", orden: "x" });
+    expect(bad).toMatchObject({ status: undefined, year: undefined, alert: undefined, sort: "actualizacion", dir: "desc" });
+    expect(hasActiveProjectFilters(bad)).toBe(false);
   });
 
   it("conserva los parámetros al paginar", () => {

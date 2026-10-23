@@ -27,6 +27,12 @@ Ocultar un botón nunca es la única barrera.
 
 La regla se aplica a documentos, historial, adjuntos (metadatos y archivos), trámites asociados, búsqueda, indicadores del panel, exportaciones, notificaciones y eventos en tiempo real.
 
+## Proyectos
+
+- Todo el personal activo ve los proyectos, sus documentos, archivos vigentes y la línea de tiempo; solo los administradores registran y modifican.
+- Las **notas internas** (`project_events.is_internal`) se filtran por RLS: el personal de consulta no las recibe ni por la API.
+- Los archivos viven en `documentos/proyectos/<proyecto>/<documento>/`; la carga exige que el documento exista en ese proyecto y la descarga pasa por `/api/proyectos/archivos/<id>` con URL firmada de 60 s. Ninguna política de borrado alcanza archivos registrados.
+
 ## Archivos
 
 - Bucket `documentos` **privado**; límite de tamaño y tipos MIME en el propio bucket.

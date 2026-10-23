@@ -188,6 +188,9 @@ export const AUDIT_TABLE_LABELS: Record<string, string> = {
   document_attachments: "Adjuntos",
   document_route_events: "Movimientos",
   reportes: "Reportes",
+  projects: "Proyectos",
+  project_documents: "Documentos de proyectos",
+  project_files: "Archivos de proyectos",
 };
 
 /** Nombres de campo en español para la bitácora de auditoría. */
@@ -244,4 +247,140 @@ export const AUDIT_FIELD_LABELS: Record<string, string> = {
   stage_changed_at: "Cambio de etapa",
   to_status: "Etapa resultante",
   from_status: "Etapa anterior",
+  code: "Código",
+  summary: "Resumen",
+  principal_investigator: "Investigador principal",
+  co_investigators: "Coinvestigadores",
+  unit: "Facultad o unidad",
+  funding_source: "Fuente de financiamiento",
+  year: "Año",
+  kind: "Tipo de documento",
+  reference: "Referencia",
+  project_id: "Proyecto",
+  project_document_id: "Documento del proyecto",
+  status_changed_at: "Cambio de estado",
+};
+
+// ---------------------------------------------------------------------------
+// Proyectos de investigación
+// ---------------------------------------------------------------------------
+export type ProjectStatus = Enums["project_status"];
+export type ProjectDocumentKind = Enums["project_document_kind"];
+export type ProjectDocumentStatus = Enums["project_document_status"];
+export type ProjectEventType = Enums["project_event_type"];
+
+export const PROJECT_STATUSES = [
+  "EN_FORMULACION",
+  "EN_TRAMITE",
+  "APROBADO",
+  "EN_EJECUCION",
+  "FINALIZADO",
+  "RECHAZADO",
+  "CANCELADO",
+] as const satisfies readonly ProjectStatus[];
+
+export const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
+  EN_FORMULACION: "En formulación",
+  EN_TRAMITE: "En trámite",
+  APROBADO: "Aprobado",
+  EN_EJECUCION: "En ejecución",
+  FINALIZADO: "Finalizado",
+  RECHAZADO: "Rechazado",
+  CANCELADO: "Cancelado",
+};
+
+/** Estados que cuentan como «Aprobados» en los indicadores. */
+export const PROJECT_APPROVED_STATUSES = ["APROBADO", "EN_EJECUCION", "FINALIZADO"] as const satisfies readonly ProjectStatus[];
+
+/** Estados que exigen indicar el motivo. */
+export const PROJECT_STATUSES_NEEDING_REASON: readonly ProjectStatus[] = ["RECHAZADO", "CANCELADO"];
+
+export function projectStatusTone(status: ProjectStatus): Tone {
+  switch (status) {
+    case "EN_TRAMITE":
+      return "warning";
+    case "APROBADO":
+    case "EN_EJECUCION":
+      return "success";
+    case "FINALIZADO":
+      return "primary";
+    case "RECHAZADO":
+      return "danger";
+    case "CANCELADO":
+      return "neutral";
+    default:
+      return "info";
+  }
+}
+
+export const PROJECT_DOCUMENT_KINDS = [
+  "OFICIO",
+  "PROPUESTA",
+  "INFORME_AVANCE",
+  "INFORME_FINAL",
+  "PRESUPUESTO",
+  "AVAL_ETICO",
+  "CARTA_INSTITUCIONAL",
+  "OTRO",
+] as const satisfies readonly ProjectDocumentKind[];
+
+export const PROJECT_DOCUMENT_KIND_LABELS: Record<ProjectDocumentKind, string> = {
+  OFICIO: "Oficio",
+  PROPUESTA: "Propuesta del proyecto",
+  INFORME_AVANCE: "Informe de avance",
+  INFORME_FINAL: "Informe final",
+  PRESUPUESTO: "Presupuesto",
+  AVAL_ETICO: "Aval ético",
+  CARTA_INSTITUCIONAL: "Carta institucional",
+  OTRO: "Otro documento",
+};
+
+export const PROJECT_DOCUMENT_STATUSES = [
+  "INGRESADO",
+  "EN_REVISION",
+  "PENDIENTE_FIRMA",
+  "ENVIADO_A_VIA",
+  "DEVUELTO",
+  "APROBADO",
+  "COMPLETADO",
+] as const satisfies readonly ProjectDocumentStatus[];
+
+export const PROJECT_DOCUMENT_STATUS_LABELS: Record<ProjectDocumentStatus, string> = {
+  INGRESADO: "Ingresado",
+  EN_REVISION: "En revisión",
+  PENDIENTE_FIRMA: "Pendiente de firma",
+  ENVIADO_A_VIA: "Enviado a vía",
+  DEVUELTO: "Devuelto con observaciones",
+  APROBADO: "Aprobado",
+  COMPLETADO: "Completado",
+};
+
+/** Etapas principales que se muestran en el indicador de avance de cada documento. */
+export const PROJECT_DOCUMENT_STEPS = ["INGRESADO", "EN_REVISION", "ENVIADO_A_VIA", "APROBADO", "COMPLETADO"] as const satisfies readonly ProjectDocumentStatus[];
+
+export function projectDocumentStatusTone(status: ProjectDocumentStatus): Tone {
+  switch (status) {
+    case "PENDIENTE_FIRMA":
+      return "warning";
+    case "DEVUELTO":
+      return "danger";
+    case "APROBADO":
+    case "COMPLETADO":
+      return "success";
+    case "INGRESADO":
+      return "primary";
+    default:
+      return "info";
+  }
+}
+
+export const PROJECT_EVENT_LABELS: Record<ProjectEventType, string> = {
+  CREACION: "Registro del proyecto",
+  CAMBIO_ESTADO: "Estado del proyecto",
+  ACTUALIZACION: "Actualización de datos",
+  DOCUMENTO_REGISTRADO: "Documento registrado",
+  DOCUMENTO_ESTADO: "Estado del documento",
+  ARCHIVO_CARGADO: "Archivo cargado",
+  ARCHIVO_RETIRADO: "Archivo retirado",
+  OBSERVACION: "Observación",
 };
