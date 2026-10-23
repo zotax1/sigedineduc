@@ -60,7 +60,7 @@ test.describe("Ruta obligatoria de documentos salientes (interfaz)", () => {
     const viewer = await viewerCtx.newPage();
     await login(viewer, VIEWER);
     await viewer.goto("/salientes");
-    await expect(viewer.getByText("En vivo")).toBeVisible({ timeout: 30_000 });
+    await expect(viewer.getByRole("button", { name: "En vivo" })).toBeVisible({ timeout: 30_000 });
 
     const adminCtx = await browser.newContext();
     const admin = await adminCtx.newPage();
