@@ -37,7 +37,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           Universidad Autónoma de Santo Domingo
         </p>
       </aside>
-      <main className="flex min-w-0 items-center justify-center px-4 py-10 sm:px-8">
+      <main className="flex min-w-0 flex-col items-center justify-center gap-5 px-4 py-10 sm:px-8">
         <div className="w-full max-w-md rounded-xl border border-border bg-card shadow-[0_18px_40px_-28px_rgba(43,16,18,0.45)]">
           {/* Cabecera institucional: ambos logotipos a la misma altura visual. */}
           <div className="flex items-center justify-center gap-4 border-b border-border px-5 py-5 sm:gap-5 sm:px-8">
@@ -64,6 +64,16 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           </p>
           <div className="px-5 py-7 sm:px-8">{children}</div>
         </div>
+        {/* Créditos de autoría del sistema. */}
+        <footer className="w-full max-w-md space-y-1.5 text-center">
+          <p className="text-[13px] text-muted-foreground">
+            Sistema desarrollado por el <span className="font-semibold text-primary">Lic. Joaquin Del Villar Martínez</span>
+          </p>
+          <p className="text-[11px] leading-relaxed text-muted-foreground/90">
+            © 2026 Joaquin Del Villar Martínez. Todos los derechos reservados. Este software es propiedad intelectual de su autor;
+            se prohíbe su reproducción, copia o distribución total o parcial sin su autorización expresa.
+          </p>
+        </footer>
       </main>
     </div>
   );
