@@ -1,24 +1,42 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useForm, type Path, type UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Info, Save } from "lucide-react";
+import { FileUp, Info, Save, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input, Select, Textarea } from "@/components/ui/input";
 import { Alert, FormField } from "@/components/ui/misc";
 import { incomingSchema, outgoingSchema, type IncomingValues, type OutgoingValues } from "@/lib/validation/documents";
 import { createDocument, updateDocument } from "@/lib/actions/documents";
-import { todayISO } from "@/lib/format";
+import { finalizeAttachment, prepareAttachmentUpload } from "@/lib/actions/attachments";
+import { precheckFile } from "@/lib/files";
+import { formatFileSize, todayISO } from "@/lib/format";
+import { uploadWithProgress } from "@/lib/upload-client";
 import { VISIBILITY_LABELS } from "@/lib/domain";
 import type { Catalogs } from "@/lib/queries/catalogs";
 
 type Values = IncomingValues & OutgoingValues;
 
 export type DocumentFormDefaults = Partial<Record<keyof Values, string | null>>;
+
+const SCAN_DESCRIPTION = "Documento escaneado recibido en INEDUC";
+
+/** Sube el escaneo al documento recién registrado: autorizar → subir → verificar. */
+async function uploadScan(documentId: string, file: File, onProgress: (pct: number) => void): Promise<string | null> {
+  const prepared = await prepareAttachmentUpload({ documentId, filename: file.name, size: file.size });
+  if (!prepared.ok || !prepared.data) return prepared.ok ? "No se pudo preparar la carga." : prepared.error;
+  try {
+    await uploadWithProgress(prepared.data.path, prepared.data.token, file, onProgress);
+  } catch {
+    return "La carga del archivo falló. Verifique su conexión.";
+  }
+  const done = await finalizeAttachment({ documentId, path: prepared.data.path, filename: file.name, description: SCAN_DESCRIPTION });
+  return done.ok ? null : done.error;
+}
 
 function Section({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
   return (
@@ -37,14 +55,42 @@ export function DocumentForm({
   catalogs,
   defaults,
   documentId,
+  scan,
 }: {
   direction: "ENTRANTE" | "SALIENTE";
   catalogs: Catalogs;
   defaults?: DocumentFormDefaults;
   documentId?: string;
+  /** Permite adjuntar el escaneo en PDF al registrar (tamaño máximo en MB). */
+  scan?: { maxMb: number };
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const scanInput = useRef<HTMLInputElement>(null);
+  const [scanFile, setScanFile] = useState<File | null>(null);
+  const [scanError, setScanError] = useState<string | null>(null);
+  const [scanProgress, setScanProgress] = useState<number | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const scanEnabled = !!scan && !documentId;
+
+  const pickScan = (file: File | null) => {
+    setScanError(null);
+    if (file && scan) {
+      const check = precheckFile(file.name, file.size, ["pdf"], scan.maxMb);
+      if (!check.ok) {
+        setScanFile(null);
+        setScanError(check.error);
+        if (scanInput.current) scanInput.current.value = "";
+        return;
+      }
+    }
+    setScanFile(file);
+  };
+  const clearScan = () => {
+    setScanFile(null);
+    setScanError(null);
+    if (scanInput.current) scanInput.current.value = "";
+  };
   const ineduc = catalogs.departments.find((d) => d.code === "INEDUC");
   const normalized = Object.fromEntries(Object.entries(defaults ?? {}).map(([k, v]) => [k, v ?? ""]));
   const form = useForm<Values>({
@@ -96,8 +142,19 @@ export function DocumentForm({
         }
         return;
       }
-      toast.success(result.message ?? "Guardado.");
       const target = documentId ?? (result.data as { id: string } | undefined)?.id;
+      if (scanEnabled && scanFile && target) {
+        setScanProgress(0);
+        const scanFailure = await uploadScan(target, scanFile, setScanProgress);
+        setScanProgress(null);
+        if (scanFailure) {
+          toast.warning(`Documento registrado, pero el escaneo no se adjuntó: ${scanFailure} Puede adjuntarlo desde la ficha del documento.`);
+        } else {
+          toast.success("Documento registrado con su escaneo adjunto.");
+        }
+      } else {
+        toast.success(result.message ?? "Guardado.");
+      }
       router.push(target ? `/documentos/${target}` : direction === "ENTRANTE" ? "/entrantes" : "/salientes");
       router.refresh();
     });
@@ -206,6 +263,78 @@ export function DocumentForm({
             <Input id="issued_on" type="date" max={todayISO()} {...reg("issued_on")} {...aria("issued_on")} />
           </FormField>
         </Section>
+      )}
+
+      {scanEnabled && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Documento escaneado</CardTitle>
+            <CardDescription>
+              Adjunte el PDF escaneado del documento tal como entró a INEDUC. Es opcional; también puede adjuntarlo después desde la ficha del documento.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {scanFile ? (
+              <div className="flex items-center gap-3 rounded-md border bg-background/60 p-3">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-primary-soft text-[11px] font-bold text-primary">PDF</span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium" title={scanFile.name}>
+                    {scanFile.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{formatFileSize(scanFile.size)} · se adjuntará al registrar</p>
+                </div>
+                <Button type="button" variant="ghost" size="sm" onClick={clearScan} disabled={pending} aria-label="Quitar el archivo escaneado">
+                  <X aria-hidden /> Quitar
+                </Button>
+              </div>
+            ) : (
+              <label
+                htmlFor="scan_pdf"
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setDragging(true);
+                }}
+                onDragLeave={() => setDragging(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setDragging(false);
+                  pickScan(e.dataTransfer.files?.[0] ?? null);
+                }}
+                className={`flex cursor-pointer flex-col items-center gap-2 rounded-md border-2 border-dashed px-4 py-6 text-center transition-colors hover:border-primary/60 hover:bg-primary-soft/40 ${
+                  dragging ? "border-primary bg-primary-soft/50" : "border-input"
+                } ${scanError ? "border-danger" : ""}`}
+              >
+                <FileUp className="size-7 text-primary" aria-hidden />
+                <span className="text-sm font-medium">Seleccione el PDF escaneado o arrástrelo aquí</span>
+                <span className="text-xs text-muted-foreground">Solo PDF · máximo {scan!.maxMb} MB</span>
+              </label>
+            )}
+            <input
+              ref={scanInput}
+              id="scan_pdf"
+              type="file"
+              accept=".pdf,application/pdf"
+              className="sr-only"
+              aria-label="Documento escaneado (PDF)"
+              aria-invalid={scanError ? true : undefined}
+              disabled={pending}
+              onChange={(e) => pickScan(e.target.files?.[0] ?? null)}
+            />
+            {scanError && (
+              <p className="text-sm text-danger" role="alert">
+                {scanError}
+              </p>
+            )}
+            {scanProgress !== null && (
+              <div className="space-y-1" aria-live="polite">
+                <div className="h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={scanProgress} aria-valuemin={0} aria-valuemax={100} aria-label="Progreso de carga del escaneo">
+                  <div className="h-full bg-primary transition-all" style={{ width: `${scanProgress}%` }} />
+                </div>
+                <p className="text-xs text-muted-foreground">{scanProgress < 100 ? `Cargando el escaneo… ${scanProgress}%` : "Verificando el archivo…"}</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       )}
 
       <Section title="Seguimiento" description="Responsable, prioridad, plazos y próxima acción.">

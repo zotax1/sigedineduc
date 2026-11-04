@@ -30,6 +30,27 @@ test.describe("Adjuntos y reportes", () => {
     expect((await res.body()).subarray(0, 5).toString()).toBe("%PDF-");
   });
 
+  test("adjunta el escaneo en PDF al registrar un documento entrante", async ({ page }) => {
+    await login(page, ADMIN);
+    await page.goto("/entrantes/nuevo");
+    const subject = unique("Entrante con escaneo E2E");
+    await page.getByLabel("Asunto").fill(subject);
+    await page.getByLabel("Institución o dependencia remitente").fill("Institución de prueba");
+    await page.getByLabel("Documento escaneado (PDF)").setInputFiles({ name: "oficio-recibido.docx", mimeType: "application/octet-stream", buffer: Buffer.from("x") });
+    await expect(page.getByRole("alert").filter({ hasText: /Formato no permitido/ })).toBeVisible();
+    await page.getByLabel("Documento escaneado (PDF)").setInputFiles({ name: "oficio-recibido.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4\n%escaneo\n%%EOF\n") });
+    await expect(page.getByText("se adjuntará al registrar")).toBeVisible();
+    await page.getByRole("button", { name: "Registrar documento" }).click();
+
+    await expect(page).toHaveURL(/\/documentos\//);
+    await expect(page.getByRole("heading", { name: subject })).toBeVisible();
+    await expect(page.getByText("oficio-recibido.pdf")).toBeVisible();
+    await expect(page.getByText("Documento escaneado recibido en INEDUC")).toBeVisible();
+    const href = await page.getByRole("link", { name: "Descargar" }).first().getAttribute("href");
+    const res = await page.request.get(href!);
+    expect((await res.body()).subarray(0, 5).toString()).toBe("%PDF-");
+  });
+
   test("las exportaciones respetan filtros y permisos", async ({ page, browser }) => {
     await login(page, ADMIN);
     const marker = unique("Exportable");
