@@ -28,10 +28,11 @@ const WATCHED_TABLES = ["documents", "document_route_events", "procedures", "pro
 
 /**
  * Tablas de módulos que se agregan con actualizaciones posteriores de la base
- * de datos. Van en un canal aparte: si la base aún no tiene esas tablas, ese
- * canal falla sin afectar la conexión en vivo del resto de la plataforma.
+ * de datos. Cada una va en su propio canal: si la base aún no tiene una de
+ * ellas, solo ese canal falla, sin afectar a las demás ni a la conexión en
+ * vivo del resto de la plataforma.
  */
-const MODULE_TABLES = ["projects", "project_documents", "project_files", "project_events"] as const;
+const MODULE_TABLES = ["projects", "project_documents", "project_files", "project_events", "researchers"] as const;
 
 /**
  * Suscripción autenticada a los cambios de la base de datos. Supabase aplica
@@ -91,7 +92,7 @@ export function RealtimeProvider({
     const supabase = getBrowserClient();
     let cancelled = false;
     let channel: ReturnType<typeof supabase.channel> | null = null;
-    let moduleChannel: ReturnType<typeof supabase.channel> | null = null;
+    const moduleChannels: ReturnType<typeof supabase.channel>[] = [];
 
     (async () => {
       await supabase.realtime.setAuth();
@@ -116,12 +117,13 @@ export function RealtimeProvider({
           setStatus("reconectando");
         }
       });
-      moduleChannel = supabase.channel(`siged-${userId}-modulos`);
-      for (const table of MODULE_TABLES) {
-        moduleChannel.on("postgres_changes", { event: "*", schema: "public", table }, scheduleRefresh);
-      }
       // Sus errores no cambian el indicador de conexión (ver MODULE_TABLES).
-      moduleChannel.subscribe();
+      for (const table of MODULE_TABLES) {
+        const moduleChannel = supabase.channel(`siged-${userId}-${table}`);
+        moduleChannel.on("postgres_changes", { event: "*", schema: "public", table }, scheduleRefresh);
+        moduleChannel.subscribe();
+        moduleChannels.push(moduleChannel);
+      }
       channel.subscribe((s) => {
         if (s === "SUBSCRIBED") {
           setStatus("en-vivo");
@@ -150,7 +152,7 @@ export function RealtimeProvider({
       document.removeEventListener("visibilitychange", onVisible);
       if (timer.current) clearTimeout(timer.current);
       if (channel) void supabase.removeChannel(channel);
-      if (moduleChannel) void supabase.removeChannel(moduleChannel);
+      for (const c of moduleChannels) void supabase.removeChannel(c);
     };
   }, [userId, scheduleRefresh, refreshNow, refreshUnread]);
 

@@ -5,11 +5,17 @@ import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/supabase/public-co
  * Carga directa al almacenamiento privado con una URL firmada de un solo uso
  * (emitida por el servidor), informando el progreso.
  */
-export function uploadWithProgress(path: string, token: string, file: File, onProgress: (pct: number) => void) {
+export function uploadWithProgress(
+  path: string,
+  token: string,
+  file: File,
+  onProgress: (pct: number) => void,
+  bucket = "documentos",
+) {
   const base = SUPABASE_URL!;
   const key = SUPABASE_PUBLISHABLE_KEY!;
   const ext = extensionOf(file.name) as SupportedExtension;
-  const url = `${base}/storage/v1/object/upload/sign/documentos/${path.split("/").map(encodeURIComponent).join("/")}?token=${encodeURIComponent(token)}`;
+  const url = `${base}/storage/v1/object/upload/sign/${bucket}/${path.split("/").map(encodeURIComponent).join("/")}?token=${encodeURIComponent(token)}`;
   return new Promise<void>((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", url);

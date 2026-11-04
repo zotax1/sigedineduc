@@ -27,6 +27,7 @@ Todas las estructuras se crean con migraciones en `supabase/migrations/` (aplica
 | `project_documents` | Documentos especiales de cada proyecto, con su propio estado, prioridad y fecha límite |
 | `project_files` | Metadatos de los archivos de proyectos (Storage: `proyectos/<proyecto>/<documento>/`) |
 | `project_events` | Línea de tiempo del proyecto, solo anexado; `is_internal` marca notas visibles solo para administradores |
+| `researchers` | Directorio de investigadores (código único, títulos, afiliación `FACULTAD`/`INEDUC`/`AMBOS`, ruta de la foto en el bucket `investigadores`) |
 | `notifications` | Notificaciones por destinatario, sin duplicados (`dedupe_key`) |
 | `audit_logs` | Bitácora de auditoría, solo anexado |
 | `document_counters`, `procedure_counters` | Numeración interna (`SIGED-S-2026-00001`, `TRM-2026-00001`) |

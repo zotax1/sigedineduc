@@ -33,6 +33,11 @@ La regla se aplica a documentos, historial, adjuntos (metadatos y archivos), tr�
 - Las **notas internas** (`project_events.is_internal`) se filtran por RLS: el personal de consulta no las recibe ni por la API.
 - Los archivos viven en `documentos/proyectos/<proyecto>/<documento>/`; la carga exige que el documento exista en ese proyecto y la descarga pasa por `/api/proyectos/archivos/<id>` con URL firmada de 60 s. Ninguna política de borrado alcanza archivos registrados.
 
+## Investigadores
+
+- Todo el personal activo consulta el directorio; solo los administradores registran y editan. Los registros no se eliminan y sus cambios quedan en la auditoría.
+- Las fotos están en el bucket privado `investigadores` (solo JPG/PNG, máximo 2 MB), en la carpeta de cada investigador, y se muestran con URL firmada de 1 hora. El navegador las recorta y comprime antes de subirlas, y el servidor verifica que el contenido sea una imagen real.
+
 ## Archivos
 
 - Bucket `documentos` **privado**; límite de tamaño y tipos MIME en el propio bucket.

@@ -191,6 +191,7 @@ export const AUDIT_TABLE_LABELS: Record<string, string> = {
   projects: "Proyectos",
   project_documents: "Documentos de proyectos",
   project_files: "Archivos de proyectos",
+  researchers: "Investigadores",
 };
 
 /** Nombres de campo en español para la bitácora de auditoría. */
@@ -259,6 +260,9 @@ export const AUDIT_FIELD_LABELS: Record<string, string> = {
   project_id: "Proyecto",
   project_document_id: "Documento del proyecto",
   status_changed_at: "Cambio de estado",
+  academic_titles: "Títulos académicos",
+  affiliation: "Afiliación",
+  photo_path: "Foto de perfil",
 };
 
 // ---------------------------------------------------------------------------
@@ -383,4 +387,24 @@ export const PROJECT_EVENT_LABELS: Record<ProjectEventType, string> = {
   ARCHIVO_CARGADO: "Archivo cargado",
   ARCHIVO_RETIRADO: "Archivo retirado",
   OBSERVACION: "Observación",
+};
+
+// ---------------------------------------------------------------------------
+// Investigadores
+// ---------------------------------------------------------------------------
+export type ResearcherAffiliation = Enums["researcher_affiliation"];
+
+export const RESEARCHER_AFFILIATIONS = ["FACULTAD", "INEDUC", "AMBOS"] as const satisfies readonly ResearcherAffiliation[];
+
+export const RESEARCHER_AFFILIATION_LABELS: Record<ResearcherAffiliation, string> = {
+  FACULTAD: "Facultad de Ciencias de la Educación",
+  INEDUC: "INEDUC",
+  AMBOS: "Facultad e INEDUC",
+};
+
+/** Etiquetas cortas para tarjetas e insignias. */
+export const RESEARCHER_AFFILIATION_SHORT: Record<ResearcherAffiliation, string> = {
+  FACULTAD: "Facultad",
+  INEDUC: "INEDUC",
+  AMBOS: "Facultad e INEDUC",
 };

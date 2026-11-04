@@ -699,6 +699,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"researchers": {
+                  Row: {
+                    "academic_titles": (string)[],"affiliation": Database["public"]['Enums']["researcher_affiliation"],"code": string,"created_at": string,"created_by": string | null,"full_name": string,"id": string,"photo_path": string | null,"search_text": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "academic_titles"?: (string)[],"affiliation": Database["public"]['Enums']["researcher_affiliation"],"code": string,"created_at"?: string,"created_by"?: string | null,"full_name": string,"id"?: string,"photo_path"?: string | null,"search_text"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "academic_titles"?: (string)[],"affiliation"?: Database["public"]['Enums']["researcher_affiliation"],"code"?: string,"created_at"?: string,"created_by"?: string | null,"full_name"?: string,"id"?: string,"photo_path"?: string | null,"search_text"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "researchers_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "researchers_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Views: {
@@ -1468,7 +1494,7 @@ isOneToOne: false
       } }
           }
           Enums: {
-            "account_status": "ACTIVO"|"SUSPENDIDO","app_role": "ADMINISTRADOR"|"CONSULTA","document_direction": "ENTRANTE"|"SALIENTE","document_status": "REGISTRADO_EN_INEDUC"|"REMITIDO_A_DIRECCION_INVESTIGACION"|"RECIBIDO_EN_DIRECCION_INVESTIGACION"|"EN_GESTION_DIRECCION_INVESTIGACION"|"REMITIDO_DESDE_DIRECCION_INVESTIGACION_A_DECANATO"|"RECIBIDO_EN_DECANATO"|"RECIBIDO"|"EN_REVISION"|"EN_TRAMITE"|"REMITIDO"|"EN_ESPERA_RESPUESTA"|"EN_SEGUIMIENTO"|"COMPLETADO"|"ARCHIVADO","document_visibility": "GENERAL"|"RESTRINGIDO","procedure_event_type": "CREACION"|"CAMBIO_ESTADO"|"REASIGNACION"|"OBSERVACION"|"ACTUALIZACION","procedure_status": "PENDIENTE"|"EN_PROCESO"|"EN_REVISION"|"EN_ESPERA_RESPUESTA"|"COMPLETADO"|"CANCELADO","project_document_kind": "OFICIO"|"PROPUESTA"|"INFORME_AVANCE"|"INFORME_FINAL"|"PRESUPUESTO"|"AVAL_ETICO"|"CARTA_INSTITUCIONAL"|"OTRO","project_document_status": "INGRESADO"|"EN_REVISION"|"PENDIENTE_FIRMA"|"ENVIADO_A_VIA"|"DEVUELTO"|"APROBADO"|"COMPLETADO","project_event_type": "CREACION"|"CAMBIO_ESTADO"|"ACTUALIZACION"|"DOCUMENTO_REGISTRADO"|"DOCUMENTO_ESTADO"|"ARCHIVO_CARGADO"|"ARCHIVO_RETIRADO"|"OBSERVACION","project_status": "EN_FORMULACION"|"EN_TRAMITE"|"APROBADO"|"EN_EJECUCION"|"FINALIZADO"|"RECHAZADO"|"CANCELADO","route_event_type": "REGISTRO"|"TRANSICION"|"MOVIMIENTO"|"OBSERVACION"|"ASIGNACION"|"REVERSION"
+            "account_status": "ACTIVO"|"SUSPENDIDO","app_role": "ADMINISTRADOR"|"CONSULTA","document_direction": "ENTRANTE"|"SALIENTE","document_status": "REGISTRADO_EN_INEDUC"|"REMITIDO_A_DIRECCION_INVESTIGACION"|"RECIBIDO_EN_DIRECCION_INVESTIGACION"|"EN_GESTION_DIRECCION_INVESTIGACION"|"REMITIDO_DESDE_DIRECCION_INVESTIGACION_A_DECANATO"|"RECIBIDO_EN_DECANATO"|"RECIBIDO"|"EN_REVISION"|"EN_TRAMITE"|"REMITIDO"|"EN_ESPERA_RESPUESTA"|"EN_SEGUIMIENTO"|"COMPLETADO"|"ARCHIVADO","document_visibility": "GENERAL"|"RESTRINGIDO","procedure_event_type": "CREACION"|"CAMBIO_ESTADO"|"REASIGNACION"|"OBSERVACION"|"ACTUALIZACION","procedure_status": "PENDIENTE"|"EN_PROCESO"|"EN_REVISION"|"EN_ESPERA_RESPUESTA"|"COMPLETADO"|"CANCELADO","project_document_kind": "OFICIO"|"PROPUESTA"|"INFORME_AVANCE"|"INFORME_FINAL"|"PRESUPUESTO"|"AVAL_ETICO"|"CARTA_INSTITUCIONAL"|"OTRO","project_document_status": "INGRESADO"|"EN_REVISION"|"PENDIENTE_FIRMA"|"ENVIADO_A_VIA"|"DEVUELTO"|"APROBADO"|"COMPLETADO","project_event_type": "CREACION"|"CAMBIO_ESTADO"|"ACTUALIZACION"|"DOCUMENTO_REGISTRADO"|"DOCUMENTO_ESTADO"|"ARCHIVO_CARGADO"|"ARCHIVO_RETIRADO"|"OBSERVACION","project_status": "EN_FORMULACION"|"EN_TRAMITE"|"APROBADO"|"EN_EJECUCION"|"FINALIZADO"|"RECHAZADO"|"CANCELADO","researcher_affiliation": "FACULTAD"|"INEDUC"|"AMBOS","route_event_type": "REGISTRO"|"TRANSICION"|"MOVIMIENTO"|"OBSERVACION"|"ASIGNACION"|"REVERSION"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -1584,7 +1610,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "account_status": ["ACTIVO", "SUSPENDIDO"],"app_role": ["ADMINISTRADOR", "CONSULTA"],"document_direction": ["ENTRANTE", "SALIENTE"],"document_status": ["REGISTRADO_EN_INEDUC", "REMITIDO_A_DIRECCION_INVESTIGACION", "RECIBIDO_EN_DIRECCION_INVESTIGACION", "EN_GESTION_DIRECCION_INVESTIGACION", "REMITIDO_DESDE_DIRECCION_INVESTIGACION_A_DECANATO", "RECIBIDO_EN_DECANATO", "RECIBIDO", "EN_REVISION", "EN_TRAMITE", "REMITIDO", "EN_ESPERA_RESPUESTA", "EN_SEGUIMIENTO", "COMPLETADO", "ARCHIVADO"],"document_visibility": ["GENERAL", "RESTRINGIDO"],"procedure_event_type": ["CREACION", "CAMBIO_ESTADO", "REASIGNACION", "OBSERVACION", "ACTUALIZACION"],"procedure_status": ["PENDIENTE", "EN_PROCESO", "EN_REVISION", "EN_ESPERA_RESPUESTA", "COMPLETADO", "CANCELADO"],"project_document_kind": ["OFICIO", "PROPUESTA", "INFORME_AVANCE", "INFORME_FINAL", "PRESUPUESTO", "AVAL_ETICO", "CARTA_INSTITUCIONAL", "OTRO"],"project_document_status": ["INGRESADO", "EN_REVISION", "PENDIENTE_FIRMA", "ENVIADO_A_VIA", "DEVUELTO", "APROBADO", "COMPLETADO"],"project_event_type": ["CREACION", "CAMBIO_ESTADO", "ACTUALIZACION", "DOCUMENTO_REGISTRADO", "DOCUMENTO_ESTADO", "ARCHIVO_CARGADO", "ARCHIVO_RETIRADO", "OBSERVACION"],"project_status": ["EN_FORMULACION", "EN_TRAMITE", "APROBADO", "EN_EJECUCION", "FINALIZADO", "RECHAZADO", "CANCELADO"],"route_event_type": ["REGISTRO", "TRANSICION", "MOVIMIENTO", "OBSERVACION", "ASIGNACION", "REVERSION"]
+            "account_status": ["ACTIVO", "SUSPENDIDO"],"app_role": ["ADMINISTRADOR", "CONSULTA"],"document_direction": ["ENTRANTE", "SALIENTE"],"document_status": ["REGISTRADO_EN_INEDUC", "REMITIDO_A_DIRECCION_INVESTIGACION", "RECIBIDO_EN_DIRECCION_INVESTIGACION", "EN_GESTION_DIRECCION_INVESTIGACION", "REMITIDO_DESDE_DIRECCION_INVESTIGACION_A_DECANATO", "RECIBIDO_EN_DECANATO", "RECIBIDO", "EN_REVISION", "EN_TRAMITE", "REMITIDO", "EN_ESPERA_RESPUESTA", "EN_SEGUIMIENTO", "COMPLETADO", "ARCHIVADO"],"document_visibility": ["GENERAL", "RESTRINGIDO"],"procedure_event_type": ["CREACION", "CAMBIO_ESTADO", "REASIGNACION", "OBSERVACION", "ACTUALIZACION"],"procedure_status": ["PENDIENTE", "EN_PROCESO", "EN_REVISION", "EN_ESPERA_RESPUESTA", "COMPLETADO", "CANCELADO"],"project_document_kind": ["OFICIO", "PROPUESTA", "INFORME_AVANCE", "INFORME_FINAL", "PRESUPUESTO", "AVAL_ETICO", "CARTA_INSTITUCIONAL", "OTRO"],"project_document_status": ["INGRESADO", "EN_REVISION", "PENDIENTE_FIRMA", "ENVIADO_A_VIA", "DEVUELTO", "APROBADO", "COMPLETADO"],"project_event_type": ["CREACION", "CAMBIO_ESTADO", "ACTUALIZACION", "DOCUMENTO_REGISTRADO", "DOCUMENTO_ESTADO", "ARCHIVO_CARGADO", "ARCHIVO_RETIRADO", "OBSERVACION"],"project_status": ["EN_FORMULACION", "EN_TRAMITE", "APROBADO", "EN_EJECUCION", "FINALIZADO", "RECHAZADO", "CANCELADO"],"researcher_affiliation": ["FACULTAD", "INEDUC", "AMBOS"],"route_event_type": ["REGISTRO", "TRANSICION", "MOVIMIENTO", "OBSERVACION", "ASIGNACION", "REVERSION"]
           }
         }
 } as const
